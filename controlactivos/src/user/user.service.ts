@@ -11,19 +11,23 @@ export class UserService {
 
     constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
-    // createUserDTO(user: createUserDTO) {
-    //     const newUser = this.userRepository.create(user)
-    //     return this.userRepository.save(newUser)
-    // }
-
-    async createUser(user: User) {
+    async createUserDTO(user: createUserDTO) {
         try {
-            const newUser = this.userRepository.create(user)
-            return await this.userRepository.save(newUser)
-        } catch (error) {
-            throw new BadRequestException('No se pudo crear un Usuario')
+              const newUser = await  this.userRepository.create(user)
+        return this.userRepository.save(newUser)
+        } catch(error){
+            throw new BadRequestException('No se pudo crear el usuario')
         }
     }
+
+    // async createUser(user: User) {
+    //     try {
+    //         const newUser = this.userRepository.create(user)
+    //         return await this.userRepository.save(newUser)
+    //     } catch (error) {
+    //         throw new BadRequestException('No se pudo crear un Usuario')
+    //     }
+    // }
 
     async getUsers() {
         try {

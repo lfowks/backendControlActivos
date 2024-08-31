@@ -1,4 +1,9 @@
 export class createUserDTO {
-    email : string
-    contraseña : string
+    nombre: string;
+    apellido_1: string;
+    apellido_2: string;
+    email: string;
+    contraseña: string;
+    rol: string;
+    descripcion?: string;
 }
