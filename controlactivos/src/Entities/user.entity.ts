@@ -8,8 +8,8 @@ export class User {
     @Column()
     nombre : string;
 
-    @Column()
-    descripcion : string;
+    @Column({nullable: true})
+    descripcion? : string;
 
     @Column()
     apellido_1 : string;

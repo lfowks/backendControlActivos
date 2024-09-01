@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm"
-import { createUserDTO } from 'src/dto/create-user.dto';
+import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { User } from '../Entities/user.entity';
 import { updateUserDTO } from 'src/dto/update-user.dto';
@@ -11,23 +11,14 @@ export class UserService {
 
     constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
-    async createUserDTO(user: createUserDTO) {
+    async createUser(createUserDTO: CreateUserDTO): Promise<User> {
         try {
-              const newUser = await  this.userRepository.create(user)
-        return this.userRepository.save(newUser)
-        } catch(error){
+            const newUser = await this.userRepository.create(createUserDTO);
+            return  await this.userRepository.save(newUser);
+        } catch (error) {
             throw new BadRequestException('No se pudo crear el usuario')
         }
     }
-
-    // async createUser(user: User) {
-    //     try {
-    //         const newUser = this.userRepository.create(user)
-    //         return await this.userRepository.save(newUser)
-    //     } catch (error) {
-    //         throw new BadRequestException('No se pudo crear un Usuario')
-    //     }
-    // }
 
     async getUsers() {
         try {
@@ -40,7 +31,7 @@ export class UserService {
     async getUser(id: number) {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) {
-            throw new NotFoundException('No se encontro el usuario con ${id}')
+            throw new NotFoundException('No se encontro el usuario');
         }
         return user;
     }
@@ -48,22 +39,22 @@ export class UserService {
     async updateUser(id: number, user: updateUserDTO) {
         const existingUser = this.userRepository.findOne({ where: { id } });
         if (!existingUser) {
-            throw new NotFoundException('No se encontro el Usuario')
+            throw new NotFoundException('No se encontro el Usuario');
         } try {
-            await this.userRepository.update({ id }, user)
+            await this.userRepository.update({ id }, user);
             return this.userRepository.findOne({ where: { id } });
         } catch (error) {
-            throw new BadRequestException('Error al actualizar usuario')
+            throw new BadRequestException('Error al actualizar usuario');
         }
     }
 
     async deleteUser(id: number) {
-        const user = await this.userRepository.findOne({where:{id}});
-        if(!user){
-            throw new NotFoundException('No se encontro el Usuario')
-        } try{
+        const user = await this.userRepository.findOne({ where: { id } });
+        if (!user) {
+            throw new NotFoundException('No se encontro el Usuario');
+        } try {
             return this.userRepository.delete(id);
-        } catch(error) {
+        } catch (error) {
             throw new BadRequestException('Error al eliminar el Usuario')
         }
     }
