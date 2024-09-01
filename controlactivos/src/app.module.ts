@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import {TypeOrmModule} from "@nestjs/typeorm"
+import { LicitacionModule } from './licitacion/licitacion.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -14,6 +15,7 @@ import {TypeOrmModule} from "@nestjs/typeorm"
     synchronize: true,
   }),
     UserModule,
+    LicitacionModule,
     ],
   controllers: [],
   providers: [],

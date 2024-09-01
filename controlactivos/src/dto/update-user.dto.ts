@@ -1,4 +1,4 @@
-export class updateUserDTO {
+export class UpdateUserDTO {
 
     nombre?: string;
 

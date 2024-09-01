@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { User } from '../Entities/user.entity';
-import { updateUserDTO } from 'src/dto/update-user.dto';
+import { UpdateUserDTO } from 'src/dto/update-user.dto';
 
 
 @Injectable()
@@ -11,12 +11,12 @@ export class UserService {
 
     constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
-    async createUser(createUserDTO: CreateUserDTO): Promise<User> {
+    async createUser(createUserDTO: CreateUserDTO) {
         try {
             const newUser = await this.userRepository.create(createUserDTO);
             return  await this.userRepository.save(newUser);
         } catch (error) {
-            throw new BadRequestException('No se pudo crear el usuario')
+            throw new BadRequestException('No se pudo crear el usuario');
         }
     }
 
@@ -24,7 +24,7 @@ export class UserService {
         try {
             return await this.userRepository.find()
         } catch (error) {
-            throw new BadRequestException('No se pudieron encontrar los Usuarios')
+            throw new NotFoundException('No se pudieron encontrar los Usuarios');
         }
     }
 
@@ -36,12 +36,12 @@ export class UserService {
         return user;
     }
 
-    async updateUser(id: number, user: updateUserDTO) {
+    async updateUser(id: number, updateuserDTO: UpdateUserDTO) {
         const existingUser = this.userRepository.findOne({ where: { id } });
         if (!existingUser) {
             throw new NotFoundException('No se encontro el Usuario');
         } try {
-            await this.userRepository.update({ id }, user);
+            await this.userRepository.update({ id }, updateuserDTO);
             return this.userRepository.findOne({ where: { id } });
         } catch (error) {
             throw new BadRequestException('Error al actualizar usuario');

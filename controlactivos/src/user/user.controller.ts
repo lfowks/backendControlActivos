@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from 
 import { UserService } from './user.service';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { User } from '../Entities/user.entity';
-import { updateUserDTO } from 'src/dto/update-user.dto';
+import { UpdateUserDTO } from 'src/dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -24,8 +24,8 @@ export class UserController {
     }
 
     @Patch(':id')
-    updateUser(@Param('id') id: number, @Body() user: updateUserDTO) {
-        return this.userService.updateUser(id, user);
+    updateUser(@Param('id') id: number, @Body() updateUserDTO: UpdateUserDTO) {
+        return this.userService.updateUser(id, updateUserDTO);
     }
 
     @Delete(":id")
