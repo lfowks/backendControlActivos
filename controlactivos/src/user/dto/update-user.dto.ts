@@ -11,6 +11,4 @@ export class UpdateUserDTO {
     email?: string;
 
     contraseña?: string;
-
-    rol?: string;
 }
