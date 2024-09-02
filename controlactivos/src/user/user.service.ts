@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm"
-import { CreateUserDTO } from 'src/dto/create-user.dto';
+import { CreateUserDTO } from 'src/user/dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { User } from '../Entities/user.entity';
-import { UpdateUserDTO } from 'src/dto/update-user.dto';
+import { UpdateUserDTO } from 'src/user/dto/update-user.dto';
 
 
 @Injectable()
@@ -37,8 +37,8 @@ export class UserService {
     }
 
     async updateUser(id: number, updateuserDTO: UpdateUserDTO) {
-        const existingUser = this.userRepository.findOne({ where: { id } });
-        if (!existingUser) {
+        const user = this.userRepository.findOne({ where: { id } });
+        if (!user) {
             throw new NotFoundException('No se encontro el Usuario');
         } try {
             await this.userRepository.update({ id }, updateuserDTO);

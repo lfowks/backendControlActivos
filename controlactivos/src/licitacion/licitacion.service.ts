@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateLicitacionDTO } from 'src/dto/create-licitacion.dto';
-import { UpdateLicitacionDTO } from 'src/dto/update-licitacion.dto';
+import { UpdateLicitacionDTO } from 'src/licitacion/dto/update-licitacion.dto';
 import { Licitacion } from 'src/Entities/licitacion.entity';
 import { Repository } from 'typeorm';
+import { CreateLicitacionDTO } from './dto/create-licitacion.dto';
 
 @Injectable()
 export class LicitacionService {
@@ -36,8 +36,8 @@ export class LicitacionService {
     }
 
     async updateLicitacion(id: number, updateLicitacionDTO: UpdateLicitacionDTO) {
-        const existingLicitacion = await this.licitacionRepository.findOne({ where: { id } });
-        if (!existingLicitacion) {
+        const licitacion = await this.licitacionRepository.findOne({ where: { id } });
+        if (!licitacion) {
             throw new NotFoundException('No se encontro la licitacion');
         } try {
             await this.licitacionRepository.update({ id }, updateLicitacionDTO);
@@ -48,8 +48,8 @@ export class LicitacionService {
     }
 
     async deleteLicitacion(id: number) {
-        const existingLicitacion = await this.licitacionRepository.findOne({ where: { id } });
-        if (!existingLicitacion) {
+        const licitacion = await this.licitacionRepository.findOne({ where: { id } });
+        if (!licitacion) {
             throw new NotFoundException('No se encontro la licitacion');
         } try {
             await this.licitacionRepository.delete(id);

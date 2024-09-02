@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import {TypeOrmModule} from "@nestjs/typeorm"
 import { LicitacionModule } from './licitacion/licitacion.module';
+import { LeyModule } from './ley/ley.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -16,6 +17,7 @@ import { LicitacionModule } from './licitacion/licitacion.module';
   }),
     UserModule,
     LicitacionModule,
+    LeyModule,
     ],
   controllers: [],
   providers: [],

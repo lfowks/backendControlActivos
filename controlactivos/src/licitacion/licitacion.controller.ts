@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { LicitacionService } from './licitacion.service';
-import { CreateLicitacionDTO } from 'src/dto/create-licitacion.dto';
 import { Licitacion } from 'src/Entities/licitacion.entity';
-import { UpdateLicitacionDTO } from 'src/dto/update-licitacion.dto';
+import { UpdateLicitacionDTO } from 'src/licitacion/dto/update-licitacion.dto';
+import { CreateLicitacionDTO } from './dto/create-licitacion.dto';
 
 @Controller('licitacion')
 export class LicitacionController {
