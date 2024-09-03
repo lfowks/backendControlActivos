@@ -15,7 +15,7 @@ export class LicitacionService {
             return await this.licitacionRepository.save(newLicitacion);
         }
         catch (error) {
-            throw new BadRequestException('Error, no se pudo crear la Licitacion');
+            throw new BadRequestException('Error, no se pudo crear la licitación');
         }
     }
 
@@ -30,7 +30,7 @@ export class LicitacionService {
     async getLicitacion(id: number) {
         const licitacion = await this.licitacionRepository.findOne({ where: { id } });
         if (!licitacion) {
-            throw new NotFoundException('No se encontro la licitacion');
+            throw new NotFoundException('No se encontro la licitación');
         }
         return licitacion;
     }
@@ -38,23 +38,23 @@ export class LicitacionService {
     async updateLicitacion(id: number, updateLicitacionDTO: UpdateLicitacionDTO) {
         const licitacion = await this.licitacionRepository.findOne({ where: { id } });
         if (!licitacion) {
-            throw new NotFoundException('No se encontro la licitacion');
+            throw new NotFoundException('No se encontro la licitación');
         } try {
             await this.licitacionRepository.update({ id }, updateLicitacionDTO);
             return await this.licitacionRepository.findOne({ where: { id } });
         } catch (error) {
-            throw new BadRequestException('Error al actualizar la licitacion');
+            throw new BadRequestException('Error al actualizar la licitación');
         }
     }
 
     async deleteLicitacion(id: number) {
         const licitacion = await this.licitacionRepository.findOne({ where: { id } });
         if (!licitacion) {
-            throw new NotFoundException('No se encontro la licitacion');
+            throw new NotFoundException('No se encontro la licitación');
         } try {
             await this.licitacionRepository.delete(id);
         } catch (error) {
-            throw new BadRequestException('Error al eliminar la licitacion');
+            throw new BadRequestException('Error al eliminar la licitación');
         }
     }
 
