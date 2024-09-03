@@ -6,6 +6,7 @@ import { LeyModule } from './ley/ley.module';
 import { ProveedorModule } from './proveedor/proveedor.module';
 import { UbicacionModule } from './ubicacion/ubicacion.module';
 import { DonadorModule } from './donador/donador.module';
+import { RolModule } from './rol/rol.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -24,6 +25,7 @@ import { DonadorModule } from './donador/donador.module';
     ProveedorModule,
     UbicacionModule,
     DonadorModule,
+    RolModule,
     ],
   controllers: [],
   providers: [],

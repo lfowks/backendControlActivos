@@ -25,6 +25,4 @@ export class User {
     @Column()
     contraseña : string;
 
-    @Column({default: 'Docente'})
-    rol : string;
 }

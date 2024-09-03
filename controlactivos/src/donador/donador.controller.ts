@@ -9,7 +9,7 @@ export class DonadorController {
     constructor(private donadorService: DonadorService) { }
 
     @Post()
-    createDonador(@Body() createDonadorDTO: CreateDonadorDTO) {
+    createDonador(@Body() createDonadorDTO: CreateDonadorDTO) : Promise<Donador> {
         return this.donadorService.createDonador(createDonadorDTO);
     }
 
