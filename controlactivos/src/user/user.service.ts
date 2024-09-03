@@ -20,9 +20,9 @@ export class UserService {
         }
     }
 
-    async getUsers() {
+    async getAllUsers() {
         try {
-            return await this.userRepository.find()
+            return await this.userRepository.find();
         } catch (error) {
             throw new NotFoundException('No se pudieron encontrar los Usuarios');
         }

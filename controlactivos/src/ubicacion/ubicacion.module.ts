@@ -1,0 +1,12 @@
+import { Module } from '@nestjs/common';
+import { UbicacionService } from './ubicacion.service';
+import { UbicacionController } from './ubicacion.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Ubicacion } from 'src/Entities/ubicacion.entity';
+
+@Module({
+  imports : [TypeOrmModule.forFeature([Ubicacion])],
+  providers: [UbicacionService],
+  controllers: [UbicacionController]
+})
+export class UbicacionModule {}

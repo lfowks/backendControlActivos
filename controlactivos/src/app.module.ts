@@ -3,6 +3,10 @@ import { UserModule } from './user/user.module';
 import {TypeOrmModule} from "@nestjs/typeorm"
 import { LicitacionModule } from './licitacion/licitacion.module';
 import { LeyModule } from './ley/ley.module';
+import { ProveedorModule } from './proveedor/proveedor.module';
+import { UbicacionModule } from './ubicacion/ubicacion.module';
+import { DonadorModule } from './donador/donador.module';
+import { RolModule } from './rol/rol.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -18,6 +22,10 @@ import { LeyModule } from './ley/ley.module';
     UserModule,
     LicitacionModule,
     LeyModule,
+    ProveedorModule,
+    UbicacionModule,
+    DonadorModule,
+    RolModule,
     ],
   controllers: [],
   providers: [],
