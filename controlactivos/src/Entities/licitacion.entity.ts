@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Proveedor } from "./proveedor.entity";
 @Entity()
 export class Licitacion {
     @PrimaryGeneratedColumn()
@@ -21,5 +22,8 @@ export class Licitacion {
 
     @Column()
     fecha : Date;
-
+    
+    
+    @ManyToOne(() => Proveedor , proveedor => proveedor.licitaciones)
+    proveedor: Proveedor;
 }

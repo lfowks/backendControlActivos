@@ -3,10 +3,13 @@ import { LicitacionService } from './licitacion.service';
 import { LicitacionController } from './licitacion.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Licitacion } from 'src/Entities/licitacion.entity';
+import { Proveedor } from 'src/Entities/proveedor.entity';
+import { ProveedorService } from 'src/proveedor/proveedor.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Licitacion])],
-    providers: [LicitacionService],
-    controllers: [LicitacionController]
+    imports: [TypeOrmModule.forFeature([Licitacion, Proveedor])],
+    providers: [LicitacionService, ProveedorService],
+    controllers: [LicitacionController],
+    exports: [LicitacionService]
 })
 export class LicitacionModule { }
