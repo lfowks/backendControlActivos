@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./user.entity";
 
 @Entity()
 export class Rol{
@@ -10,4 +11,7 @@ export class Rol{
 
     @Column()
     descripcion : string
+
+    @OneToMany(() => User, user => user.rol)  // Relación inversa One-to-Many
+    users: User[];
 }
