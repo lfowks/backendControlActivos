@@ -1,28 +1,32 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { IsEmail } from 'class-validator';
+import { Rol } from "./rol.entity";
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    id : number;
-    
-    @Column()
-    nombre : string;
-
-    @Column({nullable: true})
-    descripcion? : string;
+    id: number;
 
     @Column()
-    apellido_1 : string;
+    nombre: string;
+
+    @Column({ nullable: true })
+    descripcion?: string;
 
     @Column()
-    apellido_2 : string;
+    apellido_1: string;
 
-    @Column({ unique : true })
+    @Column()
+    apellido_2: string;
+
+    @Column({ unique: true })
     @IsEmail()
-    email : string;
+    email: string;
 
     @Column()
-    contraseña : string;
+    contraseña: string;
+
+    @ManyToOne(() => Rol, rol => rol.users)  // Relación Many-to-One
+    rol: Rol
 
 }

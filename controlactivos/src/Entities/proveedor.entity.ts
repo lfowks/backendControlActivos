@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { IsEmail } from "class-validator";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Licitacion } from "./licitacion.entity";
 @Entity()
 export class Proveedor {
     @PrimaryGeneratedColumn()
@@ -16,7 +18,12 @@ export class Proveedor {
     @Column()
     telefonoEmpresa: number;
 
-    @Column()
+    @Column({unique : true})
+    @IsEmail()
     email: string;
+    
+
+    @OneToMany(() => Licitacion, licitacion => licitacion.proveedor)
+    licitaciones : Licitacion
 
 }
