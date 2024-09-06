@@ -7,6 +7,7 @@ import { Ubicacion } from 'src/Entities/ubicacion.entity';
 @Module({
   imports : [TypeOrmModule.forFeature([Ubicacion])],
   providers: [UbicacionService],
-  controllers: [UbicacionController]
+  controllers: [UbicacionController],
+  exports: [UbicacionService]
 })
 export class UbicacionModule {}
