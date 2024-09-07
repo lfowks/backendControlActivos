@@ -35,9 +35,7 @@ export class UserService {
 
     async getAllUsers() {
         try {
-            return await this.userRepository.find({
-                relations: ['rol']
-            });
+            return await this.userRepository.find({relations: ['rol']});
         } catch (error) {
             throw new NotFoundException('No se pudieron encontrar los Usuarios');
         }

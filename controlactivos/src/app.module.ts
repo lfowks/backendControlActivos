@@ -7,6 +7,8 @@ import { ProveedorModule } from './proveedor/proveedor.module';
 import { UbicacionModule } from './ubicacion/ubicacion.module';
 import { DonadorModule } from './donador/donador.module';
 import { RolModule } from './rol/rol.module';
+import { ActivoModule } from './activo/activo.module';
+import { LicenciaModule } from './licencia/licencia.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -26,6 +28,8 @@ import { RolModule } from './rol/rol.module';
     UbicacionModule,
     DonadorModule,
     RolModule,
+    ActivoModule,
+    LicenciaModule,
     ],
   controllers: [],
   providers: [],
