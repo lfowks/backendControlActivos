@@ -60,7 +60,7 @@ export class LicitacionService {
         const licitacion = await this.licitacionRepository.findOne({ where: { id } });
         if (!licitacion) {
           throw new NotFoundException('No se encontró la licitación');
-        } try {
+        }  try {
 
           if (updateLicitacionDTO.idProveedor) {
             const proveedor = await this.proveedorRepository.findOne({

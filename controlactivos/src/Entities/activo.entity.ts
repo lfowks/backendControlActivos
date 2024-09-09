@@ -1,42 +1,55 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Ubicacion } from "./ubicacion.entity";
+import { Ley } from "./ley.entity";
+import { Donador } from "./donador.entity";
 
 @Entity()
 export class Activo{
     @PrimaryGeneratedColumn()
-    id : number
+    id : number;
     
     @Column()
-    nombre : string
+    nombre : string;
     
     @Column()
-    descripcion : string
+    descripcion : string;
     
     @Column()
-    marca : string
+    marca : string;
     
     @Column()
-    serie : string
+    serie : string;
     
     @Column()
-    estado : string
+    estado : string;
     
     @Column()
-    modelo : string
+    modelo : string;
 
     @Column()
-    numPlaca : number
+    numPlaca : number;
 
     @Column()
-    foto : string
+    foto : string;
 
     @Column()
-    precio : number
+    precio : number;
 
     @Column()
-    observacion : string
+    observacion : string;
+
+    @Column({ nullable: true })
+    modoAdquisicion: string;
 
     @ManyToOne(() => Ubicacion, ubicacion => ubicacion.activos)
     ubicacion: Ubicacion;
+
+    @ManyToOne(() => Ley, { nullable: true })
+    ley: Ley;
+
+    @ManyToOne(() => Donador, { nullable: true })
+    donador: Donador;
+
+
 
 }
