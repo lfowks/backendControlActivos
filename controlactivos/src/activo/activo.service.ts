@@ -39,6 +39,7 @@ export class ActivoService {
     let ley = null;
     let donador = null;
     let modoAdquisicion = '';
+    let foto = '';
 
     // Si se proporciona leyId, buscar la Ley
     if (leyId) {
@@ -60,7 +61,8 @@ export class ActivoService {
       ubicacion,
       ley,
       donador,
-      modoAdquisicion,  // Guardar el nombre de la Ley o Donador
+      modoAdquisicion,
+      foto  // Guardar el nombre de la Ley o Donador
     });
 
     return await this.activoRepository.save(newActivo);
