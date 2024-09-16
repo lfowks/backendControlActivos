@@ -26,7 +26,7 @@ export class User {
     @Column()
     contraseña: string;
 
-    @ManyToOne(() => Rol, rol => rol.users)  // Relación Many-to-One
+    @ManyToOne(() => Rol, (rol) => rol.users)  // Relación Many-to-One
     rol: Rol
 
 }

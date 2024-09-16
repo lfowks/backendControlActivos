@@ -23,6 +23,11 @@ export class UserController {
         return this.userService.getUser(id);
     }
 
+    @Get('docente')
+    async getDocentes(): Promise<User[]> {
+      return this.userService.getAllDocentes();
+    }
+
     @Patch(':id')
     updateUser(@Param('id') id: number, @Body() updateUserDTO: UpdateUserDTO) {
         return this.userService.updateUser(id, updateUserDTO);
