@@ -6,4 +6,5 @@ export class UpdateLicitacionDTO {
     descripcion?: string;
     fecha?: Date;
     idProveedor?: number;
+    idLey?:number;
 }

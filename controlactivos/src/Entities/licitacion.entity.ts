@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Proveedor } from "./proveedor.entity";
+import { Ley } from "./ley.entity";
 @Entity()
 export class Licitacion {
     @PrimaryGeneratedColumn()
@@ -26,4 +27,7 @@ export class Licitacion {
     
     @ManyToOne(() => Proveedor , proveedor => proveedor.licitaciones)
     proveedor: Proveedor;
+
+    @ManyToOne(() => Ley)
+    ley: Ley; 
 }
