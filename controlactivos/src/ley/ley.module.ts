@@ -7,6 +7,7 @@ import { Ley } from 'src/Entities/ley.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Ley])],
   providers: [LeyService],
-  controllers: [LeyController]
+  controllers: [LeyController],
+  exports:[LeyService]
 })
 export class LeyModule {}

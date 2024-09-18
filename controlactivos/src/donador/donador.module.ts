@@ -7,6 +7,7 @@ import { Donador } from 'src/Entities/donador.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Donador])],
   providers: [DonadorService],
-  controllers: [DonadorController]
+  controllers: [DonadorController],
+  exports:[DonadorService]
 })
 export class DonadorModule {}

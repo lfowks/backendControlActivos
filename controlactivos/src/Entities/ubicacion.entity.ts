@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Activo } from "./activo.entity";
+import { User } from "./user.entity";
 @Entity()
 export class Ubicacion {
     @PrimaryGeneratedColumn()
@@ -16,4 +17,7 @@ export class Ubicacion {
 
     @OneToMany(() => Activo, activo => activo.ubicacion)
     activos: Activo;
+
+    @ManyToMany(() => User, user => user.ubicaciones)  // Relación Many-to-Many con User
+    users: User[];
 }

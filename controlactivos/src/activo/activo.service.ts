@@ -53,7 +53,7 @@ export class ActivoService {
     const activo = await this.activoRepository.findOne({ where: { id }, relations: ['ubicacion', 'ley'] });
 
     if (!activo) {
-      throw new NotFoundException(`Activo con ID ${id} no encontrado`);
+      throw new NotFoundException("Activo con ID ${id} no encontrado");
     }
     return activo;
   }
@@ -62,7 +62,7 @@ export class ActivoService {
     const activo = await this.activoRepository.findOne({ where: { id } });
 
     if (!activo) {
-      throw new NotFoundException(`Activo con ID ${id} no encontrado`);
+      throw new NotFoundException("Activo con ID ${id} no encontrado");
     }
 
     if (updateActivoDTO.ubicacionId) {
@@ -92,7 +92,7 @@ export class ActivoService {
     const result = await this.activoRepository.delete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Activo con ID ${id} no encontrado`);
+      throw new NotFoundException("Activo con ID ${id} no encontrado");
     }
   }
 }

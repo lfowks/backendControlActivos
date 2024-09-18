@@ -12,6 +12,6 @@ export class Rol{
     @Column()
     descripcion : string
 
-    @OneToMany(() => User, user => user.rol)  // Relación inversa One-to-Many
+    @OneToMany(() => User, (user) => user.rol)  // Relación inversa One-to-Many
     users: User[];
 }
