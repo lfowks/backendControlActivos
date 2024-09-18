@@ -1,8 +1,8 @@
 export class CreateLicitacionDTO {
     numActa: number;
     numLicitacion: number;
-    Nombre: string;
-    Monto: number;
+    nombre: string;
+    monto: number;
     descripcion: string;
     fecha: Date;
     idProveedor: number;
