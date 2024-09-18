@@ -16,7 +16,7 @@ import { LicenciaModule } from './licencia/licencia.module';
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: '12345',
+    password: '',
     database: 'controlactivos',
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true,

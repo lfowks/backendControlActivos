@@ -5,6 +5,7 @@ import { Ubicacion } from 'src/Entities/ubicacion.entity';
 import { Repository } from 'typeorm';
 import { CreateActivoDTO } from './dto/create-activo.dto';
 import { UpdateActivoDTO } from './dto/update-activo.dto';
+import { Ley } from 'src/Entities/ley.entity'; // Importamos la entidad Ley
 
 @Injectable()
 export class ActivoService {
@@ -12,33 +13,44 @@ export class ActivoService {
     @InjectRepository(Ubicacion)
     private ubicacionRepository: Repository<Ubicacion>,
     @InjectRepository(Activo)
-    private activoRepository: Repository<Activo>
-  ) { }
+    private activoRepository: Repository<Activo>,
+    @InjectRepository(Ley)
+    private leyRepository: Repository<Ley> // Repositorio de Ley
+  ) {}
 
-
+  // Crear activo con posibilidad de adquisición por ley
   async createActivo(createActivoDTO: CreateActivoDTO): Promise<Activo> {
-    const ubicacion = await this.ubicacionRepository.findOne({ where: { id: createActivoDTO.ubicacionId } });
+    const { ubicacionId, modoAdquisicion, leyId } = createActivoDTO;
+
+    const ubicacion = await this.ubicacionRepository.findOne({ where: { id: ubicacionId } });
 
     if (!ubicacion) {
       throw new NotFoundException('Ubicación no encontrada');
     }
 
+    let ley = null;
+    if (modoAdquisicion === 'Ley' && leyId) {
+      ley = await this.leyRepository.findOne({ where: { id: leyId } });
+      if (!ley) {
+        throw new NotFoundException('Ley no encontrada');
+      }
+    }
+
     const newActivo = this.activoRepository.create({
       ...createActivoDTO,
       ubicacion,
+      ley, // Solo si el modo es "Ley"
     });
 
     return await this.activoRepository.save(newActivo);
   }
 
-
   async getAllActivos(): Promise<Activo[]> {
-    return await this.activoRepository.find({ relations: ['ubicacion'] });
+    return await this.activoRepository.find({ relations: ['ubicacion', 'ley'] });
   }
 
-
   async getActivo(id: number): Promise<Activo> {
-    const activo = await this.activoRepository.findOne({ where: { id }, relations: ['ubicacion'] });
+    const activo = await this.activoRepository.findOne({ where: { id }, relations: ['ubicacion', 'ley'] });
 
     if (!activo) {
       throw new NotFoundException(`Activo con ID ${id} no encontrado`);
@@ -62,6 +74,15 @@ export class ActivoService {
       activo.ubicacion = ubicacion;
     }
 
+    if (updateActivoDTO.modoAdquisicion === 'Ley' && updateActivoDTO.leyId) {
+      const ley = await this.leyRepository.findOne({ where: { id: updateActivoDTO.leyId } });
+
+      if (!ley) {
+        throw new NotFoundException('Ley no encontrada');
+      }
+      activo.ley = ley;
+    }
+
     Object.assign(activo, updateActivoDTO);
 
     return await this.activoRepository.save(activo);
@@ -74,5 +95,4 @@ export class ActivoService {
       throw new NotFoundException(`Activo con ID ${id} no encontrado`);
     }
   }
-
 }
