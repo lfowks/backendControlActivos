@@ -2,6 +2,6 @@ export class CreateLicenciaDTO {
     nombre : string
     descripcion : string
     codigoLicencia : string
-    donadorId? : number
+    modoAdquisicion : string
     leyId? : number
 }
