@@ -23,6 +23,11 @@ export class ActivoController {
         return await this.activoService.getActivo(id);
     }
 
+    @Get('ubicacion/:ubicacionId')
+    async getActivosByUbicacion(@Param('ubicacionId') ubicacionId: number): Promise<Activo[]> {
+        return await this.activoService.getActivosByUbicacion(ubicacionId);
+    }
+
     @Patch(':id')
     async updateActivo(
         @Param('id') id: number, @Body() updateActivoDTO: UpdateActivoDTO): Promise<Activo> {

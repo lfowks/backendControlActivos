@@ -11,7 +11,6 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  // Valida si el usuario existe y si la contraseña es correcta
   async validateUser(email: string, contraseña: string): Promise<User | null> {
     const user = await this.userService.findOneByEmail(email);
 
@@ -19,7 +18,6 @@ export class AuthService {
       return null;
     }
 
-    // Verificamos la contraseña de manera asíncrona
     const isPasswordValid = await bcrypt.compare(contraseña, user.contraseña);
     if (!isPasswordValid) {
       return null;
@@ -29,9 +27,15 @@ export class AuthService {
     return result as User;  // Retornamos el usuario sin la contraseña
   }
 
-  // Genera el token JWT al hacer login
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id, role: user.rol.nombre };
+    // Aquí incluimos las ubicaciones en el payload del token
+    const payload = { 
+      email: user.email, 
+      sub: user.id, 
+      userId: user.id, 
+      role: user.rol.nombre,
+      ubicaciones: user.ubicaciones.map((ubicacion) => ({ id: ubicacion.id, nombre: ubicacion.nombre }))
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };
