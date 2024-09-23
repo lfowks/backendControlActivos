@@ -23,21 +23,20 @@ export class AuthService {
       return null;
     }
 
-    const { contraseña: pass, ...result } = user;
-    return result as User;  // Retornamos el usuario sin la contraseña
+    return user;  // Retornamos el usuario completo con las relaciones cargadas
   }
 
-  async login(user: any) {
-    // Aquí incluimos las ubicaciones en el payload del token
-    const payload = { 
-      email: user.email, 
-      sub: user.id, 
-      userId: user.id, 
+  async login(user: User) {
+    const payload = {
+      email: user.email,
+      sub: user.id,
       role: user.rol.nombre,
-      ubicaciones: user.ubicaciones.map((ubicacion) => ({ id: ubicacion.id, nombre: ubicacion.nombre }))
+      ubicaciones: user.ubicaciones.map((ubicacion) => ({ id: ubicacion.id, nombre: ubicacion.nombre })),
+      nombre: user.nombre,  // Incluye el nombre del usuario
     };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 }
+
