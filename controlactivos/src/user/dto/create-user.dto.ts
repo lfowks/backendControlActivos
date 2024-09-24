@@ -6,5 +6,6 @@ export class CreateUserDTO {
     contraseña: string;
     descripcion? : string;
     
+    rolId : number;
     ubicacionIds? : number[]
 }

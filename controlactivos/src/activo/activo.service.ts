@@ -53,16 +53,26 @@ export class ActivoService {
     const activo = await this.activoRepository.findOne({ where: { id }, relations: ['ubicacion', 'ley'] });
 
     if (!activo) {
-      throw new NotFoundException("Activo con ID ${id} no encontrado");
+      throw new NotFoundException(`Activo con ID ${id} no encontrado`);
     }
     return activo;
+  }
+
+  async getActivosByUbicacion(ubicacionId: number): Promise<Activo[]> {
+    const activos = await this.activoRepository.find({ where: { ubicacion: { id: ubicacionId } }, relations: ['ubicacion', 'ley'] });
+
+    if (!activos.length) {
+      throw new NotFoundException(`No se encontraron activos para la ubicación con ID ${ubicacionId}`);
+    }
+
+    return activos;
   }
 
   async updateActivo(id: number, updateActivoDTO: UpdateActivoDTO): Promise<Activo> {
     const activo = await this.activoRepository.findOne({ where: { id } });
 
     if (!activo) {
-      throw new NotFoundException("Activo con ID ${id} no encontrado");
+      throw new NotFoundException(`Activo con ID ${id} no encontrado`);
     }
 
     if (updateActivoDTO.ubicacionId) {
@@ -92,7 +102,7 @@ export class ActivoService {
     const result = await this.activoRepository.delete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException("Activo con ID ${id} no encontrado");
+      throw new NotFoundException(`Activo con ID ${id} no encontrado`);
     }
   }
 }

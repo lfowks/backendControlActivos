@@ -28,10 +28,9 @@ export class User {
     contraseña: string;
 
     @ManyToOne(() => Rol, (rol) => rol.users)  // Relación Many-to-One
-    rol: Rol
+    rol: Rol;
 
     @ManyToMany(() => Ubicacion, ubicacion => ubicacion.users)  // Relación Many-to-Many
     @JoinTable()  // Especifica que esta entidad posee la tabla intermedia
     ubicaciones: Ubicacion[];
-
 }
