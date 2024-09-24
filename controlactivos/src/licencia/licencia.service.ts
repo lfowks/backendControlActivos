@@ -1,59 +1,92 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Licencia } from 'src/Entities/licencia.entity';
 import { Repository } from 'typeorm';
 import { UpdateLicenciaDTO } from './dto/update-licencia.dto';
 import { CreateLicenciaDTO } from './dto/create-licencia.dto';
+import { Donador } from 'src/Entities/donador.entity';
+import { Ley } from 'src/Entities/ley.entity';
 
 @Injectable()
 export class LicenciaService {
-    constructor(@InjectRepository(Licencia) private licenciaRepository : Repository<Licencia>) {}
+  constructor(@InjectRepository(Licencia)
+  private licenciaRepository: Repository<Licencia>,
+    @InjectRepository(Ley)
+    private leyRepository: Repository<Ley>,
+  ) { }
 
-    async createLicencia(createLicenciaDTO: CreateLicenciaDTO): Promise<Licencia> {
-        try {
-          const nuevaLicencia = this.licenciaRepository.create(createLicenciaDTO);
-          return await this.licenciaRepository.save(nuevaLicencia);
-        } catch (error) {
-          throw new BadRequestException('No se pudo crear la licencia');
-        }
+  async createLicencia(createLicenciaDTO: CreateLicenciaDTO): Promise<Licencia> {
+    const { modoAdquisicion, leyId } = createLicenciaDTO;
+  
+    let ley = null;
+    if (modoAdquisicion === 'Ley' && leyId) {
+      ley = await this.leyRepository.findOne({ where: { id: leyId } });
+      if (!ley) {
+        throw new NotFoundException('Ley no encontrada');
       }
-    
-      // 2. Obtener todas las licencias
-      async getAllLicencias(): Promise<Licencia[]> {
-        return await this.licenciaRepository.find();
+    }
+  
+    const newLicencia = this.licenciaRepository.create({
+      ...createLicenciaDTO,
+      ley, // Solo si el modo es "Ley"
+    });
+  
+    try {
+      const savedLicencia = await this.licenciaRepository.save(newLicencia);
+      if (!savedLicencia) {
+        throw new InternalServerErrorException('No se pudo crear la licencia');
       }
-    
-      // 3. Obtener una licencia por ID
-      async getLicenciaById(id: number): Promise<Licencia> {
-        const licencia = await this.licenciaRepository.findOne({ where: { id } });
-    
-        if (!licencia) {
-          throw new NotFoundException(`Licencia con ID ${id} no encontrada`);
-        }
-    
-        return licencia;
+      return savedLicencia;
+    } catch (error) {
+      throw new InternalServerErrorException('Ocurrió un error al crear la licencia');
+    }
+  }
+  
+  async getAllLicencias(): Promise<Licencia[]> {
+    return await this.licenciaRepository.find({
+      relations: ['ley', 'donador'],
+    });
+  }
+
+  async getLicenciaById(id: number): Promise<Licencia> {
+    const licencia = await this.licenciaRepository.findOne({
+      where: { id },
+      relations: ['ley', 'donador'],
+    });
+
+    if (!licencia) {
+      throw new NotFoundException(`Licencia con ID ${id} no encontrada`);
+    }
+    return licencia;
+  }
+
+  async updateLicencia(id: number, updateLicenciaDTO: UpdateLicenciaDTO): Promise<Licencia> {
+    const licencia = await this.licenciaRepository.findOne({ where: { id } });
+  
+    if (!licencia) {
+      throw new NotFoundException(`Licencia con ID ${id} no encontrada`);
+    }
+  
+    if (updateLicenciaDTO.modoAdquisicion === 'Ley' && updateLicenciaDTO.leyId) {
+      const ley = await this.leyRepository.findOne({ where: { id: updateLicenciaDTO.leyId } });
+  
+      if (!ley) {
+        throw new NotFoundException('Ley no encontrada');
       }
-    
-      // 4. Actualizar una licencia por ID
-      async updateLicencia(id: number, updateLicenciaDTO: UpdateLicenciaDTO): Promise<Licencia> {
-        const licencia = await this.licenciaRepository.findOne({ where: { id } });
-    
-        if (!licencia) {
-          throw new NotFoundException(`Licencia con ID ${id} no encontrada`);
-        }
-    
-        Object.assign(licencia, updateLicenciaDTO); // Actualizamos los campos con el DTO
-    
-        return await this.licenciaRepository.save(licencia); // Guardamos los cambios
-      }
-    
-      // 5. Eliminar una licencia por ID
-      async deleteLicencia(id: number): Promise<void> {
-        const result = await this.licenciaRepository.delete(id);
-    
-        if (result.affected === 0) {
-          throw new NotFoundException(`Licencia con ID ${id} no encontrada`);
-        }
-      }
+      licencia.ley = ley;
+    }
+  
+    Object.assign(licencia, updateLicenciaDTO);
+
+    return await this.licenciaRepository.save(licencia);
+  }
+  
+
+  async deleteLicencia(id: number): Promise<void> {
+    const result = await this.licenciaRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Licencia con ID ${id} no encontrada`);
+    }
+  }
 
 }

@@ -1,55 +1,48 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Ubicacion } from "./ubicacion.entity";
-import { Ley } from "./ley.entity";
-import { Donador } from "./donador.entity";
+import { Ley } from "./ley.entity"; // Importamos la entidad Ley
 
 @Entity()
-export class Activo{
+export class Activo {
     @PrimaryGeneratedColumn()
-    id : number;
-    
-    @Column()
-    nombre : string;
-    
-    @Column()
-    descripcion : string;
-    
-    @Column()
-    marca : string;
-    
-    @Column()
-    serie : string;
-    
-    @Column()
-    estado : string;
-    
-    @Column()
-    modelo : string;
+    id: number;
 
     @Column()
-    numPlaca : number;
+    nombre: string;
 
     @Column()
-    foto : string;
+    descripcion: string;
 
     @Column()
-    precio : number;
+    marca: string;
 
     @Column()
-    observacion : string;
+    serie: string;
+
+    @Column()
+    estado: string;
+
+    @Column()
+    modelo: string;
+
+    @Column()
+    numPlaca: number;
+
+    @Column()
+    foto: string;
 
     @Column({ nullable: true })
-    modoAdquisicion: string;
+    precio: number;
+
+    @Column({ nullable: true })
+    observacion: string;
+
+    @Column()
+    modoAdquisicion: string; // Columna para especificar si es "Ley" o "Donación"
 
     @ManyToOne(() => Ubicacion, ubicacion => ubicacion.activos)
     ubicacion: Ubicacion;
 
-    @ManyToOne(() => Ley, { nullable: true })
-    ley: Ley;
-
-    @ManyToOne(() => Donador, { nullable: true })
-    donador: Donador;
-
-
-
+    @ManyToOne(() => Ley, { nullable: true }) // Relación opcional con Ley
+    ley?: Ley;
 }

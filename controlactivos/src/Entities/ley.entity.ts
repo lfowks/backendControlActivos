@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Licitacion } from "./licitacion.entity";
 @Entity()
 export class Ley{
     @PrimaryGeneratedColumn()
@@ -12,4 +13,7 @@ export class Ley{
 
     @Column()
     detalle : string;
+
+    @OneToMany(() => Licitacion, licitacion => licitacion.ley)
+    licitaciones: Licitacion[];
 }
