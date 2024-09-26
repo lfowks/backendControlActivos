@@ -4,7 +4,6 @@ import { Licencia } from 'src/Entities/licencia.entity';
 import { Repository } from 'typeorm';
 import { UpdateLicenciaDTO } from './dto/update-licencia.dto';
 import { CreateLicenciaDTO } from './dto/create-licencia.dto';
-import { Donador } from 'src/Entities/donador.entity';
 import { Ley } from 'src/Entities/ley.entity';
 
 @Injectable()
@@ -82,11 +81,15 @@ export class LicenciaService {
   }
   
 
-  async deleteLicencia(id: number): Promise<void> {
-    const result = await this.licenciaRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Licencia con ID ${id} no encontrada`);
+  async deleteLicencia(id: number) {
+    const licencia = await this.licenciaRepository.findOne({ where: { id } });
+    if (!licencia) {
+        throw new NotFoundException('No se encontro la licencia seleccionada');
+    } try {
+        return await this.licenciaRepository.delete(id);
+    } catch (error) {
+        throw new BadRequestException('Error al eliminar una licencia');
     }
-  }
+}
 
 }

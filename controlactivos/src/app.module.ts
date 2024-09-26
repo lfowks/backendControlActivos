@@ -20,7 +20,7 @@ import { ConfigModule } from '@nestjs/config';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '',
+      password: '12345',
       database: 'controlactivos',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,

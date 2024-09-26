@@ -30,6 +30,6 @@ export class LicenciaController {
 
     @Delete(':id')
     async deleteLicencia(@Param('id') id: number): Promise<void> {
-        return await this.licenciaService.deleteLicencia(id);
+     await this.licenciaService.deleteLicencia(id);
     }
 }

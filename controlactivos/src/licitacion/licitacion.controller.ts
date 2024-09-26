@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { LicitacionService } from './licitacion.service';
 import { Licitacion } from 'src/Entities/licitacion.entity';
 import { UpdateLicitacionDTO } from 'src/licitacion/dto/update-licitacion.dto';
@@ -29,7 +29,7 @@ export class LicitacionController {
     }
 
     @Delete(':id')
-    deleteLicitacion(@Param('id', ParseIntPipe) id: number){
+    deleteLicitacion(@Param('id') id: number){
         return this.licitacionService.deleteLicitacion(id);
     }
 }

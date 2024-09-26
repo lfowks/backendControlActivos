@@ -71,39 +71,45 @@ export class LicitacionService {
 
     // Actualizar Licitación
     async updateLicitacion(id: number, updateLicitacionDTO: UpdateLicitacionDTO) {
-        const licitacion = await this.licitacionRepository.findOne({ where: { id } });
+        const licitacion = await this.licitacionRepository.findOne({ where: { id }, relations: ['proveedor', 'ley'] });
+    
         if (!licitacion) {
-          throw new NotFoundException('No se encontró la licitación');
-        }  
-
+            throw new NotFoundException('No se encontró la licitación');
+        }
+    
         try {
+            // Manejo de la relación con Proveedor
             if (updateLicitacionDTO.idProveedor) {
-                const proveedor = await this.proveedorRepository.findOne({
-                    where: { id: updateLicitacionDTO.idProveedor },
-                });
+                const proveedor = await this.proveedorRepository.findOne({ where: { id: updateLicitacionDTO.idProveedor } });
                 if (!proveedor) {
                     throw new NotFoundException('Proveedor no encontrado');
                 }
                 licitacion.proveedor = proveedor;
+            } else if (updateLicitacionDTO.idProveedor === null) {
+                licitacion.proveedor = null; // Permitir desasociar el proveedor si es necesario
             }
-
+    
+            // Manejo de la relación con Ley
             if (updateLicitacionDTO.idLey) {
-                const ley = await this.leyRepository.findOne({
-                    where: { id: updateLicitacionDTO.idLey },
-                });
+                const ley = await this.leyRepository.findOne({ where: { id: updateLicitacionDTO.idLey } });
                 if (!ley) {
                     throw new NotFoundException('Ley no encontrada');
                 }
                 licitacion.ley = ley;
+            } else if (updateLicitacionDTO.idLey === null) {
+                licitacion.ley = null; // Permitir desasociar la ley si es necesario
             }
-
+    
+            // Asignar otros campos
             Object.assign(licitacion, updateLicitacionDTO);
+    
+            // Guardar la licitación actualizada en la base de datos
             return await this.licitacionRepository.save(licitacion);
         } catch (error) {
             throw new BadRequestException('Error al actualizar la licitación');
         }
     }
-
+    
     // Eliminar Licitación
     async deleteLicitacion(id: number) {
         const licitacion = await this.licitacionRepository.findOne({ where: { id } });

@@ -13,10 +13,10 @@ export class Proveedor {
     nombreEmpresa: string;
 
     @Column()
-    telefonoProveedor: number;
+    telefonoProveedor: string;
     
     @Column()
-    telefonoEmpresa: number;
+    telefonoEmpresa: string;
 
     @Column({unique : true})
     @IsEmail()
