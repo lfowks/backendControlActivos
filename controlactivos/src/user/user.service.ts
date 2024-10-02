@@ -75,28 +75,38 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
-  // Método para actualizar un usuario
-  async updateUser(id: number, updateUserDTO: UpdateUserDTO): Promise<User> {
-    const user = await this.getUser(id);
-    if (updateUserDTO.rolId) {
-      const rol = await this.rolRepository.findOne({ where: { id: updateUserDTO.rolId } });
-      if (!rol) {
-        throw new NotFoundException('Rol no encontrado');
-      }
-      user.rol = rol;
-    }
-
-    if (updateUserDTO.ubicacionIds) {
-      const ubicaciones = await this.ubicacionRepository.findByIds(updateUserDTO.ubicacionIds);
-      if (ubicaciones.length !== updateUserDTO.ubicacionIds.length) {
-        throw new NotFoundException('Una o más ubicaciones no fueron encontradas');
-      }
-      user.ubicaciones = ubicaciones;
-    }
-
-    Object.assign(user, updateUserDTO);
-    return await this.userRepository.save(user);
+// Método para actualizar un usuario
+async updateUser(id: number, updateUserDTO: UpdateUserDTO): Promise<User> {
+  // Buscar el usuario por ID
+  const user = await this.getUser(id);
+  if (!user) {
+    throw new NotFoundException('Usuario no encontrado');
   }
+
+  // Actualización del rol
+  if (updateUserDTO.rolId) {
+    const rol = await this.rolRepository.findOne({ where: { id: updateUserDTO.rolId } });
+    if (!rol) {
+      throw new NotFoundException('Rol no encontrado');
+    }
+    user.rol = rol; // Asignar el rol encontrado
+  }
+
+  // Actualización de ubicaciones
+  if (updateUserDTO.ubicacionIds && updateUserDTO.ubicacionIds.length > 0) {
+    const ubicaciones = await this.ubicacionRepository.findByIds(updateUserDTO.ubicacionIds);
+    if (ubicaciones.length !== updateUserDTO.ubicacionIds.length) {
+      throw new NotFoundException('Una o más ubicaciones no fueron encontradas');
+    }
+    user.ubicaciones = ubicaciones; // Asignar las ubicaciones encontradas
+  }
+
+  // Asignar las demás propiedades que vienen en el DTO
+  Object.assign(user, updateUserDTO);
+
+  // Guardar el usuario actualizado
+  return await this.userRepository.save(user);
+}
 
   // Método para eliminar un usuario
   async deleteUser(id: number): Promise<void> {

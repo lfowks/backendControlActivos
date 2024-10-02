@@ -11,9 +11,6 @@ export class User {
     @Column()
     nombre: string;
 
-    @Column({ nullable: true })
-    descripcion?: string;
-
     @Column()
     apellido_1: string;
 
