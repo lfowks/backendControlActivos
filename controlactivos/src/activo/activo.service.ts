@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { CreateActivoDTO } from './dto/create-activo.dto';
 import { UpdateActivoDTO } from './dto/update-activo.dto';
 import { Ley } from 'src/Entities/ley.entity'; // Importamos la entidad Ley
+import * as bwipjs from 'bwip-js';
+import { Response } from 'express';  // Importa el Response de Express para enviar la imagen
 
 @Injectable()
 export class ActivoService {
@@ -103,6 +105,29 @@ export class ActivoService {
 
     if (result.affected === 0) {
       throw new NotFoundException(`Activo con ID ${id} no encontrado`);
+    }
+  }
+
+  // Lógica para generar el código de barras
+  async generateBarcode(numPlaca: string, res: Response): Promise<void> {
+    try {
+      bwipjs.toBuffer({
+        bcid: 'code128',       // Formato de código de barras
+        text: numPlaca,        // El número de placa
+        scale: 3,              // Escala
+        height: 10,            // Altura del código de barras
+        includetext: true,     // Incluir el texto del número de placa
+        textxalign: 'center',  // Alineación del texto
+      }, (err, png) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.setHeader('Content-Type', 'image/png');
+          res.send(png);
+        }
+      });
+    } catch (error) {
+      res.status(500).send('Error generando el código de barras');
     }
   }
 }
