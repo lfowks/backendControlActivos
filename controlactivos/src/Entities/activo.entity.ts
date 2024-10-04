@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Ubicacion } from "./ubicacion.entity";
 import { Ley } from "./ley.entity"; // Importamos la entidad Ley
+import { Prestamo } from "./prestamo.entity";
 
 @Entity()
 export class Activo {
@@ -45,4 +46,7 @@ export class Activo {
 
     @ManyToOne(() => Ley, { nullable: true }) // Relación opcional con Ley
     ley?: Ley;
+
+    @OneToMany(() => Prestamo, (prestamo) => prestamo.activo)
+    prestamos: Prestamo[];
 }

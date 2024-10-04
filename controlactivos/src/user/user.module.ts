@@ -4,7 +4,6 @@ import { UserService } from './user.service';
 import { User } from '../Entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Rol } from 'src/Entities/rol.entity';
-import { ProveedorService } from 'src/proveedor/proveedor.service';
 import { RolService } from 'src/rol/rol.service';
 import { Ubicacion } from 'src/Entities/ubicacion.entity';
 
