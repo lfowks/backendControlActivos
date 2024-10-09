@@ -1,40 +1,102 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Prestamo } from 'src/Entities/prestamo.entity';
 import { Repository } from 'typeorm';
-import { CrearPrestamoDto } from './dto/CrearPrestamoDto';
+import { CreatePrestamoDTO } from './dto/create-prestamo.dto';
+import { Prestamo } from '../Entities/prestamo.entity';
+import { Activo } from '../Entities/activo.entity';
+import { User } from '../Entities/user.entity';
+import { Ubicacion } from '../Entities/ubicacion.entity';
 
 @Injectable()
 export class PrestamoService {
   constructor(
     @InjectRepository(Prestamo)
-    private prestamoRepository: Repository<Prestamo>,
+    private readonly prestamoRepository: Repository<Prestamo>,
+    @InjectRepository(Activo)
+    private readonly activoRepository: Repository<Activo>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Ubicacion)
+    private readonly ubicacionRepository: Repository<Ubicacion>,
   ) {}
 
-  async solicitarPrestamo(prestamoDto: CrearPrestamoDto, userId: number) {
-    // Aquí puedes buscar el usuario y el activo asociados
+  async createPrestamo(createPrestamoDTO: CreatePrestamoDTO) {
+    const { activoId, prestadoPorId, prestadoAId, ubicacionId, ubicacionActualId, fechaDevolucion } = createPrestamoDTO;
+
+    const activo = await this.activoRepository.findOne({ where: { id: activoId } });
+    if (!activo) {
+      throw new NotFoundException(`Activo con id ${activoId} no encontrado`);
+    }
+
+    const prestadoPor = await this.userRepository.findOne({ where: { id: prestadoPorId } });
+    if (!prestadoPor) {
+      throw new NotFoundException(`Usuario que presta con id ${prestadoPorId} no encontrado`);
+    }
+
+    const prestadoA = await this.userRepository.findOne({ where: { id: prestadoAId } });
+    if (!prestadoA) {
+      throw new NotFoundException(`Usuario que recibe con id ${prestadoAId} no encontrado`);
+    }
+
+    const ubicacion = await this.ubicacionRepository.findOne({ where: { id: ubicacionId } });
+    if (!ubicacion) {
+      throw new NotFoundException(`Ubicación con id ${ubicacionId} no encontrada`);
+    }
+
+    const ubicacionActual = await this.ubicacionRepository.findOne({ where: { id: ubicacionActualId } });
+    if (!ubicacionActual) {
+      throw new NotFoundException(`Ubicación actual con id ${ubicacionActualId} no encontrada`);
+    }
+
     const prestamo = this.prestamoRepository.create({
-      ...prestamoDto,
-      user: { id: userId },  // Asignamos el usuario autenticado al préstamo
-      estado: 'pendiente',
-      fecha_solicitud: new Date(),
+      activo,
+      prestadoPor,
+      prestadoA,
+      ubicacion,
+      ubicacionActual,  // Guardamos la ubicación actual
+      fechaPrestamo: new Date(), // Fecha actual como fecha de préstamo
+      fechaDevolucion: fechaDevolucion ? new Date(fechaDevolucion) : null,  // Fecha de devolución opcional
+      estado: 'En préstamo',
     });
 
-    return await this.prestamoRepository.save(prestamo);
+    try {
+      return await this.prestamoRepository.save(prestamo);
+    } catch (error) {
+      throw new BadRequestException('Hubo un problema al guardar el préstamo');
+    }
   }
 
-  async aprobarPrestamo(id: number): Promise<Prestamo> {
-    const prestamo = await this.prestamoRepository.findOne({ where: { prestamo_id: id } });
+  async updateEstado(id: number, estado: string) {
+    const prestamo = await this.prestamoRepository.findOne({ where: { id } });
     if (!prestamo) {
-      throw new NotFoundException('Prestamo no encontrado');
+      throw new NotFoundException('Préstamo no encontrado');
     }
-    prestamo.estado = 'aprobado';
-    prestamo.fecha_aprobacion = new Date();
+    prestamo.estado = estado;
+    if (estado === 'Devuelto') {
+      prestamo.fechaDevolucion = new Date();
+    }
     return this.prestamoRepository.save(prestamo);
   }
+  
+  async deletePrestamo(id: number) {
+    const prestamo = await this.prestamoRepository.findOne({ where: { id } });
+    if (!prestamo) {
+      throw new NotFoundException('Préstamo no encontrado');
+    }
+    await this.prestamoRepository.remove(prestamo);
+    return { message: 'Préstamo eliminado correctamente' };
+  }
 
-  async listarPrestamos(): Promise<Prestamo[]> {
-    return this.prestamoRepository.find({ relations: ['user', 'activo', 'ubicacion_origen', 'ubicacion_destino'] });
+  async getPrestamosByUbicacion(ubicacionId: number) {
+    return this.prestamoRepository.find({
+      where: { ubicacion: { id: ubicacionId } },
+      relations: ['activo', 'prestadoPor', 'prestadoA', 'ubicacion'],
+    });
+  }
+  async getPrestamosByUsuario(prestadoPorId: number) {
+    return this.prestamoRepository.find({
+      where: { prestadoPor: { id: prestadoPorId } }, // Filtramos por los préstamos hechos por el usuario
+      relations: ['activo', 'prestadoA', 'ubicacion', 'ubicacionActual'], // Cargamos las relaciones necesarias
+    });
   }
 }
-
