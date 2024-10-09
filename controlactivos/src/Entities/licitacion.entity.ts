@@ -1,6 +1,8 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Proveedor } from "./proveedor.entity";
 import { Ley } from "./ley.entity";
+import { Activo } from "./activo.entity";  // Relación con Activo
+
 @Entity()
 export class Licitacion {
     @PrimaryGeneratedColumn()
@@ -23,11 +25,13 @@ export class Licitacion {
 
     @Column()
     fecha : Date;
-    
-    
+
     @ManyToOne(() => Proveedor , proveedor => proveedor.licitaciones)
     proveedor: Proveedor;
 
-    @ManyToOne(() => Ley)
+    @ManyToOne(() => Ley)  // Relación con Ley
     ley: Ley; 
+
+    @OneToMany(() => Activo, activo => activo.licitacion) // Relación inversa con Activo
+    activos: Activo[];
 }

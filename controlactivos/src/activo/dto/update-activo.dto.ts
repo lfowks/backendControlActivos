@@ -11,5 +11,5 @@ export class UpdateActivoDTO {
     observacion?: string;
     ubicacionId?: number;
     modoAdquisicion?: string; // "Ley" o "Donación"
-    leyId?: number; // Campo opcional para ley
+    licitacionId: number;// Campo opcional para ley
 }

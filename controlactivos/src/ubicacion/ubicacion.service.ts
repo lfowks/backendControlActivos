@@ -38,12 +38,15 @@ export class UbicacionService {
   }
 
   async updateUbicacion(id: number, updateUbicacionDTO: UpdateUbicacionDTO): Promise<Ubicacion> {
-    const ubicacion = await this.getUbicacion(id);
+    const ubicacion = await this.ubicacionRepository.findOne({where : {id}});
+    if (!ubicacion) {
+      throw new NotFoundException(`No se encontró la ubicación con ID ${id}`);
+    }
     try {
-      await this.ubicacionRepository.update(id, updateUbicacionDTO);
-      return this.getUbicacion(id);
-    } catch {
-      throw new BadRequestException('Error al actualizar la ubicación');
+      const updatedUbicacion = Object.assign(ubicacion, updateUbicacionDTO);
+      return await this.ubicacionRepository.save(updatedUbicacion);
+    } catch (error) {
+      throw new BadRequestException(`Error al actualizar la ubicación: ${error.message}`);
     }
   }
 

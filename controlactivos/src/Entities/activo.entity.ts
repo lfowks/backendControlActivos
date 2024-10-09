@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Ubicacion } from "./ubicacion.entity";
-import { Ley } from "./ley.entity"; // Importamos la entidad Ley
+import { Licitacion } from "./licitacion.entity"; // Relación con Licitacion
+import { Prestamo } from "./prestamo.entity";
 
 @Entity()
 export class Activo {
@@ -19,7 +20,18 @@ export class Activo {
     @Column()
     serie: string;
 
-    @Column()
+    @Column({
+        type: 'varchar',
+        length: 50,
+        default: 'Activo',  // Valor predeterminado "Activo"
+    })
+    disponibilidad: string;
+
+    @Column({
+        type: 'varchar',
+        length: 50,
+        default: 'Bueno',  // Valor predeterminado "Bueno"
+    })
     estado: string;
 
     @Column()
@@ -28,7 +40,8 @@ export class Activo {
     @Column()
     numPlaca: number;
 
-    @Column()
+    @Column({nullable : true})
+
     foto: string;
 
     @Column({ nullable: true })
@@ -43,6 +56,10 @@ export class Activo {
     @ManyToOne(() => Ubicacion, ubicacion => ubicacion.activos)
     ubicacion: Ubicacion;
 
-    @ManyToOne(() => Ley, { nullable: true }) // Relación opcional con Ley
-    ley?: Ley;
+    // Relación con Licitacion, de donde se obtiene la Ley
+    @ManyToOne(() => Licitacion, licitacion => licitacion.activos, { nullable: true })
+    licitacion?: Licitacion;
+
+    @OneToMany(() => Prestamo, (prestamo) => prestamo.activo)
+    prestamos: Prestamo[];
 }
