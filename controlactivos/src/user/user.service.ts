@@ -1,3 +1,5 @@
+// src/user/user.service.ts
+
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,6 +20,20 @@ export class UserService {
     @InjectRepository(Ubicacion)
     private ubicacionRepository: Repository<Ubicacion>,
   ) {}
+
+  // Método para obtener las ubicaciones de un usuario específico
+  async getUbicacionesByUserId(userId: number): Promise<Ubicacion[]> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['ubicaciones'], // Relacionamos las ubicaciones
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    return user.ubicaciones;
+  }
 
   // Método para buscar usuario por email y cargar su rol
   async findOneByEmail(email: string): Promise<User | undefined> {
@@ -43,33 +59,28 @@ export class UserService {
 
   // Método para crear un usuario
   async createUser(createUserDTO: CreateUserDTO): Promise<User> {
-    // Verificar si el email ya está en uso
     const existingUser = await this.userRepository.findOne({ where: { email: createUserDTO.email } });
     if (existingUser) {
       throw new BadRequestException('El email ya está en uso.');
     }
 
-    // Verificar si el rol existe
     const rol = await this.rolRepository.findOne({ where: { id: createUserDTO.rolId } });
     if (!rol) {
       throw new NotFoundException('Rol no encontrado');
     }
 
-    // Verificar si las ubicaciones existen
     const ubicaciones = await this.ubicacionRepository.findByIds(createUserDTO.ubicacionIds || []);
     if (ubicaciones.length !== (createUserDTO.ubicacionIds?.length || 0)) {
       throw new NotFoundException('Una o más ubicaciones no fueron encontradas');
     }
 
-    // Cifrar la contraseña antes de guardarla en la base de datos
     const hashedPassword = await bcrypt.hash(createUserDTO.contraseña, 10);
 
-    // Crear el nuevo usuario
     const newUser = this.userRepository.create({
       ...createUserDTO,
       contraseña: hashedPassword,
       rol,
-      ubicaciones,  // Asignar las ubicaciones relacionadas
+      ubicaciones,
     });
 
     return await this.userRepository.save(newUser);
@@ -98,12 +109,27 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  // Método para eliminar un usuario
   async deleteUser(id: number): Promise<void> {
     const user = await this.getUser(id);
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
     await this.userRepository.delete(id);
+  }
+
+  // Método para obtener todos los docentes
+  async getDocentes(): Promise<User[]> {
+    const docentes = await this.userRepository.find({
+      where: {
+        rol: { id: 2 },  // ID del rol de docente
+      },
+      relations: ['rol', 'ubicaciones'],
+    });
+
+    if (!docentes.length) {
+      throw new NotFoundException('No se encontraron docentes');
+    }
+
+    return docentes;
   }
 }
