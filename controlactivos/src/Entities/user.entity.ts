@@ -2,7 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGen
 import { IsEmail } from 'class-validator';
 import { Rol } from "./rol.entity";
 import { Ubicacion } from "./ubicacion.entity";
-import { Prestamo } from "./prestamo.entity";
+
 
 @Entity()
 export class User {
@@ -32,6 +32,4 @@ export class User {
     @JoinTable()  // Especifica que esta entidad posee la tabla intermedia
     ubicaciones: Ubicacion[];
 
-    @OneToMany(() => Prestamo, (prestamo) => prestamo.user)
-    prestamos: Prestamo[];
 }
