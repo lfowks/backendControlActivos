@@ -1,8 +1,7 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { IsEmail } from 'class-validator';
 import { Rol } from "./rol.entity";
 import { Ubicacion } from "./ubicacion.entity";
-
 
 @Entity()
 export class User {
@@ -11,6 +10,9 @@ export class User {
 
     @Column()
     nombre: string;
+
+    @Column({ nullable: true })
+    descripcion?: string;
 
     @Column()
     apellido_1: string;
@@ -31,5 +33,4 @@ export class User {
     @ManyToMany(() => Ubicacion, ubicacion => ubicacion.users)  // Relación Many-to-Many
     @JoinTable()  // Especifica que esta entidad posee la tabla intermedia
     ubicaciones: Ubicacion[];
-
 }

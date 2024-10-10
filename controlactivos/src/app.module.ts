@@ -11,7 +11,7 @@ import { ActivoModule } from './activo/activo.module';
 import { LicenciaModule } from './licencia/licencia.module';
 import { AuthModule } from './auth/auth.module';  // Importa el módulo de autenticación
 import { ConfigModule } from '@nestjs/config';
-
+import { PrestamoModule } from './Prestamo/prestamo.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { ConfigModule } from '@nestjs/config';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '12345',
+      password: '',
       database: 'controlactivos',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
@@ -35,7 +35,9 @@ import { ConfigModule } from '@nestjs/config';
     RolModule,
     ActivoModule,
     LicenciaModule,
-    AuthModule,  // Agrega el AuthModule aquí
+    AuthModule,
+    PrestamoModule,
+      // Agrega el AuthModule aquí
   ],
   controllers: [],
   providers: [],
