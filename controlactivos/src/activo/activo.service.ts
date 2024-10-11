@@ -52,7 +52,6 @@ export class ActivoService {
     return await this.activoRepository.save(newActivo);
   }
   
-
   async getAllActivos(): Promise<Activo[]> {
     // Cargamos también la licitación y la ley a través de las relaciones
     return await this.activoRepository.find({ relations: ['ubicacion', 'licitacion', 'licitacion.ley'] });
