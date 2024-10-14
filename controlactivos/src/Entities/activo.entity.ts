@@ -37,7 +37,7 @@ export class Activo {
     modelo: string;
 
     @Column()
-    numPlaca: number;
+    numPlaca: string;
 
     @Column({nullable : true})
 

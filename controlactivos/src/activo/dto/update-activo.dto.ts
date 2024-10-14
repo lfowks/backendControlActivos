@@ -5,7 +5,7 @@ export class UpdateActivoDTO {
     serie?: string;
     estado?: string;
     modelo?: string;
-    numPlaca?: number;
+    numPlaca?: string;
     foto?: string;
     precio?: number;
     observacion?: string;

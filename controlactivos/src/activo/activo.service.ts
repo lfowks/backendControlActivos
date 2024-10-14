@@ -40,10 +40,9 @@ export class ActivoService {
 
     const newActivo = this.activoRepository.create({
       ...createActivoDTO, 
-  
       disponibilidad: createActivoDTO.disponibilidad || 'Activo',
       estado: createActivoDTO.estado || 'Bueno',
-      
+      numPlaca: String(createActivoDTO.numPlaca),
       ubicacion,
       licitacion, // Asociamos el activo a la licitación
     });
@@ -53,8 +52,8 @@ export class ActivoService {
   }
   
   async getAllActivos(): Promise<Activo[]> {
-    // Cargamos también la licitación y la ley a través de las relaciones
     return await this.activoRepository.find({ relations: ['ubicacion', 'licitacion', 'licitacion.ley'] });
+    
   }
 
   async getActivo(id: number): Promise<Activo> {
@@ -101,7 +100,9 @@ export class ActivoService {
       activo.licitacion = licitacion;
     }
 
-    Object.assign(activo, updateActivoDTO);
+    Object.assign(activo, updateActivoDTO, {
+      numPlaca: String(updateActivoDTO.numPlaca),
+    });
 
     return await this.activoRepository.save(activo);
   }

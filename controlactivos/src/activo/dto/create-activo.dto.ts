@@ -6,7 +6,7 @@ export class CreateActivoDTO {
     estado?: string;
     disponibilidad?: string;
     modelo: string;
-    numPlaca: number;
+    numPlaca: string;
     foto: string;
     precio: number;
     observacion?: string;
