@@ -22,34 +22,53 @@ export class ActivoService {
 
   async createActivo(createActivoDTO: CreateActivoDTO): Promise<Activo> {
     const { ubicacionId, modoAdquisicion, licitacionId } = createActivoDTO;
-  
+
     // Obtener la ubicación
     const ubicacion = await this.ubicacionRepository.findOne({ where: { id: ubicacionId } });
     if (!ubicacion) {
-      throw new NotFoundException('Ubicación no encontrada');
+        throw new NotFoundException('Ubicación no encontrada');
     }
-  
+
     // Obtener la licitación (de la cual se obtiene la ley)
     let licitacion = null;
     if (modoAdquisicion === 'Ley' && licitacionId) {
-      licitacion = await this.licitacionRepository.findOne({ where: { id: licitacionId }, relations: ['ley'] });
-      if (!licitacion) {
-        throw new NotFoundException('Licitación no encontrada');
-      }
+        licitacion = await this.licitacionRepository.findOne({ where: { id: licitacionId }, relations: ['ley'] });
+        if (!licitacion) {
+            throw new NotFoundException('Licitación no encontrada');
+        }
     }
 
-    const newActivo = this.activoRepository.create({
-      ...createActivoDTO, 
-      disponibilidad: createActivoDTO.disponibilidad || 'Activo',
-      estado: createActivoDTO.estado || 'Bueno',
-      numPlaca: String(createActivoDTO.numPlaca),
-      ubicacion,
-      licitacion, // Asociamos el activo a la licitación
+    // Obtener el último numPlaca generado para generar el nuevo de forma secuencial
+    const ultimoActivo = await this.activoRepository.find({
+        order: { id: 'DESC' },
+        take: 1,
     });
-  
-    // Guardar el activo
+
+    // Generar nuevo numPlaca
+    let nuevoNumPlaca: string;
+    if (ultimoActivo.length === 0) {
+        // Si no hay activos, empezamos con "4197-0001"
+        nuevoNumPlaca = '4197-0001';
+    } else {
+        // Si ya hay activos, obtenemos el último numPlaca y lo incrementamos
+        const ultimoNumero = parseInt(ultimoActivo[0].numPlaca.split('-')[1], 10) + 1;
+        nuevoNumPlaca = `4197-${ultimoNumero.toString().padStart(4, '0')}`;
+    }
+
+    // Crear el nuevo activo con el numPlaca generado
+    const newActivo = this.activoRepository.create({
+        ...createActivoDTO, 
+        disponibilidad: createActivoDTO.disponibilidad || 'Activo',
+        estado: createActivoDTO.estado || 'Bueno',
+        numPlaca: nuevoNumPlaca,  // Asignamos el nuevo numPlaca
+        ubicacion,
+        licitacion, // Asociamos el activo a la licitación si aplica
+    });
+
+    // Guardar el activo en la base de datos
     return await this.activoRepository.save(newActivo);
-  }
+}
+
   
   async getAllActivos(): Promise<Activo[]> {
     return await this.activoRepository.find({ relations: ['ubicacion', 'licitacion', 'licitacion.ley'] });
