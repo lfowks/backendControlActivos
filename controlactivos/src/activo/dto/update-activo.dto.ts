@@ -5,11 +5,11 @@ export class UpdateActivoDTO {
     serie?: string;
     estado?: string;
     modelo?: string;
-    numPlaca?: number;
+    numPlaca?: string;
     foto?: string;
     precio?: number;
     observacion?: string;
     ubicacionId?: number;
     modoAdquisicion?: string; // "Ley" o "Donación"
-    leyId?: number; // Campo opcional para ley
+    licitacionId: number;// Campo opcional para ley
 }

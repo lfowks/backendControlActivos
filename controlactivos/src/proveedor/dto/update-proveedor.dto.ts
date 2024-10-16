@@ -5,9 +5,9 @@ export class UpdateProveedorDTO {
     
     nombreEmpresa?: string;
 
-    telefonoProveedor?: number;
+    telefonoProveedor?: string;
 
-    telefonoEmpresa?: number;
+    telefonoEmpresa?: string;
 
     @IsEmail({}, {message: 'El email ingresado no es válido.'})
     email?: string;

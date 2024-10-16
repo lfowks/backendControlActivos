@@ -4,7 +4,7 @@ export class CreateUserDTO {
     apellido_2: string;
     email: string;
     contraseña: string;
-    descripcion? : string;
     
+    rolId : number;
     ubicacionIds? : number[]
 }

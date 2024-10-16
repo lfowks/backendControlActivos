@@ -3,13 +3,14 @@ export class CreateActivoDTO {
     descripcion: string;
     marca: string;
     serie: string;
-    estado: string;
+    estado?: string;
+    disponibilidad?: string;
     modelo: string;
-    numPlaca: number;
+    numPlaca: string;
     foto: string;
     precio: number;
-    observacion: string;
+    observacion?: string;
     ubicacionId: number;
-    modoAdquisicion: string; // "Ley" o "Donación"
-    leyId?: number; // Campo opcional para ley si el modo de adquisición es "Ley"
+    modoAdquisicion: string;
+    licitacionId?:number
 }

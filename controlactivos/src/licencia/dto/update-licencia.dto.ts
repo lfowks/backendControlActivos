@@ -3,5 +3,5 @@ export class UpdateLicenciaDTO {
     descripcion? : string
     codigoLicencia? : string
     leyId?: number
-    donadorId: number
+    modoAdquisicion? : string
 }
