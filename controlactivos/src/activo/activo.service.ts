@@ -95,36 +95,48 @@ export class ActivoService {
   }
 
   async updateActivo(id: number, updateActivoDTO: UpdateActivoDTO): Promise<Activo> {
-    const activo = await this.activoRepository.findOne({ where: { id }, relations: ['licitacion'] });
+    // Buscar el activo existente
+    const activo = await this.activoRepository.findOne({ where: { id }, relations: ['ubicacion', 'licitacion'] });
 
     if (!activo) {
-      throw new NotFoundException(`Activo con ID ${id} no encontrado`);
+        throw new NotFoundException(`Activo con ID ${id} no encontrado`);
     }
 
+    // Actualizar la ubicación si se proporciona una nueva
     if (updateActivoDTO.ubicacionId) {
-      const ubicacion = await this.ubicacionRepository.findOne({ where: { id: updateActivoDTO.ubicacionId } });
+        const ubicacion = await this.ubicacionRepository.findOne({ where: { id: updateActivoDTO.ubicacionId } });
 
-      if (!ubicacion) {
-        throw new NotFoundException('Ubicación no encontrada');
-      }
-      activo.ubicacion = ubicacion;
+        if (!ubicacion) {
+            throw new NotFoundException('Ubicación no encontrada');
+        }
+        activo.ubicacion = ubicacion;
     }
 
+    // Actualizar la licitación si se proporciona y el modo de adquisición es 'Ley'
     if (updateActivoDTO.modoAdquisicion === 'Ley' && updateActivoDTO.licitacionId) {
-      const licitacion = await this.licitacionRepository.findOne({ where: { id: updateActivoDTO.licitacionId }, relations: ['ley'] });
+        const licitacion = await this.licitacionRepository.findOne({ where: { id: updateActivoDTO.licitacionId }, relations: ['ley'] });
 
-      if (!licitacion) {
-        throw new NotFoundException('Licitación no encontrada');
-      }
-      activo.licitacion = licitacion;
+        if (!licitacion) {
+            throw new NotFoundException('Licitación no encontrada');
+        }
+        activo.licitacion = licitacion;
+    } else if (updateActivoDTO.modoAdquisicion !== 'Ley') {
+        // Si el modo de adquisición no es 'Ley', eliminamos cualquier relación con licitación
+        activo.licitacion = null;
     }
 
-    Object.assign(activo, updateActivoDTO, {
-      numPlaca: String(updateActivoDTO.numPlaca),
-    });
+    // Si se proporciona un numPlaca en el DTO, usarlo; de lo contrario, conservar el existente
+    if (updateActivoDTO.numPlaca) {
+        activo.numPlaca = String(updateActivoDTO.numPlaca);
+    }
 
+    // Actualizar el resto de los campos sin sobrescribir campos importantes como `numPlaca` si no se proporciona uno nuevo
+    const { numPlaca, ubicacionId, licitacionId, ...restoDatos } = updateActivoDTO;
+    Object.assign(activo, restoDatos);
+
+    // Guardar los cambios en la base de datos
     return await this.activoRepository.save(activo);
-  }
+}
 
   async deleteActivo(id: number): Promise<void> {
     const result = await this.activoRepository.delete(id);
