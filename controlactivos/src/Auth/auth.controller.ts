@@ -8,12 +8,14 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() loginDto: LoginDTO) {
-    const user = await this.authService.validateUser(loginDto.email, loginDto.contraseña);
+    const { email, contraseña, recaptchaToken } = loginDto;  // Extraer recaptchaToken desde loginDto
+
+    const user = await this.authService.validateUser(email, contraseña);
 
     if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-
-    return this.authService.login(user);
+    // Pasar recaptchaToken al AuthService
+    return this.authService.login(user, recaptchaToken);
   }
 }
