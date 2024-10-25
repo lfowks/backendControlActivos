@@ -10,13 +10,6 @@ import { JwtAuthGuard } from 'src/Auth/JwtAuthGuard';
 export class PrestamoController {
   constructor(private readonly prestamoService: PrestamoService) {}
 
-    // Nueva ruta para obtener préstamos por activo
-    @Get('activo/:activoId')
-    @Roles('Docente', 'Administrador')
-    async getPrestamosByActivo(@Param('activoId') activoId: number) {
-      return this.prestamoService.getPrestamosByActivo(activoId);
-    }
-
   @Get('ubicacion/:ubicacionId')
   @Roles('Docente', 'Administrador')
   async getPrestamosByUbicacion(@Param('ubicacionId') ubicacionId: number) {
@@ -29,8 +22,6 @@ export class PrestamoController {
     return this.prestamoService.getPrestamosByUsuario(prestadoPorId);
   }
 
-    // Nueva ruta para obtener préstamos por activo
-    
   @Post()
   @Roles('Docente', 'Administrador')
   async createPrestamo(@Body() createPrestamoDTO: CreatePrestamoDTO) {
