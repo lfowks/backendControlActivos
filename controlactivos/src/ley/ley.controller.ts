@@ -28,8 +28,9 @@ export class LeyController {
         return this.leyService.updateLey(id, updateLeyDTO);
     }
 
-    @Delete(':id') 
-    deleteLey(@Param('id') id : number){
-        return this.leyService.deleteLey(id);
-    }
+    @Patch(':id/disponibilidad')
+    updateDisponibilidadLey(@Param('id') id: number) {
+        return this.leyService.updateDisponibilidadLey(id);
+    }    
+
 }
