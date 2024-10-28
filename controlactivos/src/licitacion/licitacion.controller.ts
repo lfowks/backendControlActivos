@@ -29,7 +29,7 @@ export class LicitacionController {
     }
 
     @Patch(':id/disponibilidad')
-    updateDisponibilidadLey(@Param('id') id: number) {
+    updateDisponibilidadLicitacion(@Param('id') id: number) {
         return this.licitacionService.updateDisponibilidadLicitacion(id);
     } 
 }

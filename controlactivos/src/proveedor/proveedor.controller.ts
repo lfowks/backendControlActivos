@@ -28,9 +28,9 @@ export class ProveedorController {
         return this.proveedorService.updateProveedor(id, updateProveedorDTO)
     }
     
-    @Delete(':id')
-    deleteProveedor(@Param('id') id : number) {
-        return this.proveedorService.deleteProveedor(id);
-    }
+    @Patch(':id/disponibilidad')
+    updateDisponibilidadProveedor(@Param('id') id: number) {
+        return this.proveedorService.updateDisponibilidadProveedor(id);
+    } 
     
 }

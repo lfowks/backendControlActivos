@@ -119,13 +119,20 @@ async updateUser(id: number, updateUserDTO: UpdateUserDTO): Promise<User> {
   return await this.userRepository.save(user);
 }
 
-  async deleteUser(id: number): Promise<void> {
-    const user = await this.getUser(id);
-    if (!user) {
-      throw new NotFoundException('Usuario no encontrado');
-    }
-    await this.userRepository.delete(id);
+async updateDisponibilidadUsuario(id: number): Promise<void> {
+  const user = await this.userRepository.findOne({ where: { id } });
+
+  if (!user) {
+    throw new NotFoundException('No se encontró al Usuario');
   }
+
+  if (user.disponibilidad === 'Fuera de Servicio') {
+    throw new BadRequestException('El Usuario ya está marcado como "Fuera de Servicio"');
+  }
+
+  user.disponibilidad = 'Fuera de Servicio';
+  await this.userRepository.save(user);
+}
 
   // Método para obtener todos los docentes
   async getDocentes(): Promise<User[]> {

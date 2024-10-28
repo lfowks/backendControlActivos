@@ -16,6 +16,9 @@ export class Licencia {
     @Column()
     codigoLicencia : string
 
+    @Column({ default: 'En Servicio' })
+    disponibilidad: string;
+
     @Column({ nullable: true })
     modoAdquisicion: string;
 

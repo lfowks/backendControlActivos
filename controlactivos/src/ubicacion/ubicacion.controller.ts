@@ -29,7 +29,7 @@ export class UbicacionController {
     }
 
     @Patch(':id/disponibilidad')
-    updateDisponibilidadLey(@Param('id') id: number) {
+    updateDisponibilidadUbicacion(@Param('id') id: number) {
         return this.ubicacionService.updateDisponibilidadUbicacion(id);
     }  
     

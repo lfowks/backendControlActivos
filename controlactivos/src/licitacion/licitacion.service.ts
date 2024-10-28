@@ -114,11 +114,11 @@ export class LicitacionService {
         const licitacion = await this.licitacionRepository.findOne({ where: { id } });
         
         if (!licitacion) {
-            throw new NotFoundException('No se encontró la Ley');
+            throw new NotFoundException('No se encontró la Licitacion');
         }
     
         if (licitacion.disponibilidad === 'Fuera de Servicio') {
-            throw new BadRequestException('La Ley ya está marcada como "Fuera de Servicio"');
+            throw new BadRequestException('La Licitacion ya está marcada como "Fuera de Servicio"');
         }
     
         licitacion.disponibilidad = 'Fuera de Servicio';
