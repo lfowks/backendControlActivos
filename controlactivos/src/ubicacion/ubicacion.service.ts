@@ -50,12 +50,18 @@ export class UbicacionService {
     }
   }
 
-  async deleteUbicacion(id: number): Promise<void> {
-    const ubicacion = await this.getUbicacion(id);
-    try {
-      await this.ubicacionRepository.delete(id);
-    } catch {
-      throw new BadRequestException('Error al eliminar la ubicación');
+  async updateDisponibilidadUbicacion(id: number): Promise<void> {
+    const ubicacion = await this.ubicacionRepository.findOne({ where: { id } });
+    
+    if (!ubicacion) {
+        throw new NotFoundException('No se encontró la Ley');
     }
-  }
+
+    if (ubicacion.disponibilidad === 'Fuera de Servicio') {
+        throw new BadRequestException('La Ley ya está marcada como "Fuera de Servicio"');
+    }
+
+    ubicacion.disponibilidad = 'Fuera de Servicio';
+    await this.ubicacionRepository.save(ubicacion);
+}
 }

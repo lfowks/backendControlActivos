@@ -16,6 +16,9 @@ export class Ubicacion {
     @Column()
     pabellon: string;
 
+    @Column({ default: 'En Servicio' })
+    disponibilidad: string;
+
     @OneToMany(() => Activo, activo => activo.ubicacion)
     activos: Activo[];
 

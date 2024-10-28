@@ -28,9 +28,9 @@ export class UbicacionController {
         return this.ubicacionService.updateUbicacion(id, updateUbicacionDTO)
     }
 
-    @Delete(':id')
-    deleteUbicacion(@Param('id') id : number) {
-        return this.ubicacionService.deleteUbicacion(id);
-    }
+    @Patch(':id/disponibilidad')
+    updateDisponibilidadLey(@Param('id') id: number) {
+        return this.ubicacionService.updateDisponibilidadUbicacion(id);
+    }  
     
 }

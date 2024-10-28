@@ -110,16 +110,18 @@ export class LicitacionService {
         }
     }
     
-    // Eliminar Licitación
-    async deleteLicitacion(id: number) {
+    async updateDisponibilidadLicitacion(id: number): Promise<void> {
         const licitacion = await this.licitacionRepository.findOne({ where: { id } });
+        
         if (!licitacion) {
-            throw new NotFoundException('No se encontró la licitación');
+            throw new NotFoundException('No se encontró la Ley');
         }
-        try {
-            await this.licitacionRepository.delete(id);
-        } catch (error) {
-            throw new BadRequestException('Error al eliminar la licitación');
+    
+        if (licitacion.disponibilidad === 'Fuera de Servicio') {
+            throw new BadRequestException('La Ley ya está marcada como "Fuera de Servicio"');
         }
+    
+        licitacion.disponibilidad = 'Fuera de Servicio';
+        await this.licitacionRepository.save(licitacion);
     }
 }
