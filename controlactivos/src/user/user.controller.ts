@@ -10,6 +10,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { User } from '../Entities/user.entity';
 import { Ubicacion } from '../Entities/ubicacion.entity';
 
+
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -59,4 +60,5 @@ export class UserController {
   async deleteUser(@Param('id') id: number): Promise<void> {
     return this.userService.deleteUser(id);
   }
+  
 }
