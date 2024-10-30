@@ -28,8 +28,8 @@ export class LicenciaController {
         return await this.licenciaService.updateLicencia(id, updateLicenciaDTO);
     }
 
-    @Delete(':id')
-    async deleteLicencia(@Param('id') id: number): Promise<void> {
-     await this.licenciaService.deleteLicencia(id);
-    }
+    @Patch(':id/disponibilidad')
+    updateDisponibilidadLicencia(@Param('id') id: number) {
+        return this.licenciaService.updateDisponibilidadLicencia(id);
+    } 
 }

@@ -27,6 +27,12 @@ export class User {
     @Column()
     contraseña: string;
 
+    @Column({ nullable: true })
+    tokenRestablecerAcceso: string;
+
+    @Column({ default: 'En Servicio' })
+    disponibilidad: string;
+
     @ManyToOne(() => Rol, (rol) => rol.users)  // Relación Many-to-One
     rol: Rol;
 

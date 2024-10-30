@@ -26,6 +26,9 @@ export class Licitacion {
     @Column()
     fecha : Date;
 
+    @Column({ default: 'En Servicio' })
+    disponibilidad: string;
+
     @ManyToOne(() => Proveedor , proveedor => proveedor.licitaciones)
     proveedor: Proveedor;
 

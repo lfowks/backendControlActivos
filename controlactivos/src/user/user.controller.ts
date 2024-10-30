@@ -10,6 +10,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { User } from '../Entities/user.entity';
 import { Ubicacion } from '../Entities/ubicacion.entity';
 
+
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -47,16 +48,16 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Administrador')  // Restringimos esta acción solo para Administrador
+  @Roles('Administrador')
   @Patch(':id')
   async updateUser(@Param('id') id: number, @Body() updateUserDTO: UpdateUserDTO): Promise<User> {
     return this.userService.updateUser(id, updateUserDTO);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Administrador')  // Restringimos esta acción solo para Administrador
-  @Delete(':id')
-  async deleteUser(@Param('id') id: number): Promise<void> {
-    return this.userService.deleteUser(id);
-  }
+  @Roles('Administrador') 
+  @Patch(':id/disponibilidad')
+  updateDisponibilidadoUsuario(@Param('id') id: number) {
+      return this.userService.updateDisponibilidadUsuario(id);
+  } 
 }

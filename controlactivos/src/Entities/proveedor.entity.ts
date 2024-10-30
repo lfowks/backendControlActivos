@@ -21,8 +21,10 @@ export class Proveedor {
     @Column({unique : true})
     @IsEmail()
     email: string;
-    
 
+    @Column({ default: 'En Servicio' })
+    disponibilidad: string;
+    
     @OneToMany(() => Licitacion, licitacion => licitacion.proveedor)
     licitaciones : Licitacion
 

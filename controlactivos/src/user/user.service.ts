@@ -19,7 +19,7 @@ export class UserService {
     private rolRepository: Repository<Rol>,
     @InjectRepository(Ubicacion)
     private ubicacionRepository: Repository<Ubicacion>,
-  ) {}
+  ) { }
 
   // Método para obtener las ubicaciones de un usuario específico
   async getUbicacionesByUserId(userId: number): Promise<Ubicacion[]> {
@@ -57,7 +57,7 @@ export class UserService {
     return user;
   }
 
-  // Método para crear un usuario
+
   async createUser(createUserDTO: CreateUserDTO): Promise<User> {
     const existingUser = await this.userRepository.findOne({ where: { email: createUserDTO.email } });
     if (existingUser) {
@@ -86,52 +86,59 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
-// Método para actualizar un usuario
-async updateUser(id: number, updateUserDTO: UpdateUserDTO): Promise<User> {
-  // Buscar el usuario por ID
-  const user = await this.getUser(id);
-  if (!user) {
-    throw new NotFoundException('Usuario no encontrado');
-  }
 
-  // Actualización del rol
-  if (updateUserDTO.rolId) {
-    const rol = await this.rolRepository.findOne({ where: { id: updateUserDTO.rolId } });
-    if (!rol) {
-      throw new NotFoundException('Rol no encontrado');
-    }
-    user.rol = rol; // Asignar el rol encontrado
-  }
+  async updateUser(id: number, updateUserDTO: UpdateUserDTO): Promise<User> {
 
-  // Actualización de ubicaciones
-  if (updateUserDTO.ubicacionIds && updateUserDTO.ubicacionIds.length > 0) {
-    const ubicaciones = await this.ubicacionRepository.findByIds(updateUserDTO.ubicacionIds);
-    if (ubicaciones.length !== updateUserDTO.ubicacionIds.length) {
-      throw new NotFoundException('Una o más ubicaciones no fueron encontradas');
-    }
-    user.ubicaciones = ubicaciones; // Asignar las ubicaciones encontradas
-  }
-
-  // Asignar las demás propiedades que vienen en el DTO
-  Object.assign(user, updateUserDTO);
-
-  // Guardar el usuario actualizado
-  return await this.userRepository.save(user);
-}
-
-  async deleteUser(id: number): Promise<void> {
     const user = await this.getUser(id);
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
-    await this.userRepository.delete(id);
+
+
+    if (updateUserDTO.rolId) {
+      const rol = await this.rolRepository.findOne({ where: { id: updateUserDTO.rolId } });
+      if (!rol) {
+        throw new NotFoundException('Rol no encontrado');
+      }
+      user.rol = rol;
+    }
+
+
+    if (updateUserDTO.ubicacionIds && updateUserDTO.ubicacionIds.length > 0) {
+      const ubicaciones = await this.ubicacionRepository.findByIds(updateUserDTO.ubicacionIds);
+      if (ubicaciones.length !== updateUserDTO.ubicacionIds.length) {
+        throw new NotFoundException('Una o más ubicaciones no fueron encontradas');
+      }
+      user.ubicaciones = ubicaciones;
+    }
+
+
+    Object.assign(user, updateUserDTO);
+
+
+    return await this.userRepository.save(user);
   }
 
-  // Método para obtener todos los docentes
+async updateDisponibilidadUsuario(id: number): Promise<void> {
+  const user = await this.userRepository.findOne({ where: { id } });
+
+  if (!user) {
+    throw new NotFoundException('No se encontró al Usuario');
+  }
+
+  if (user.disponibilidad === 'Fuera de Servicio') {
+    throw new BadRequestException('El Usuario ya está marcado como "Fuera de Servicio"');
+  }
+
+  user.disponibilidad = 'Fuera de Servicio';
+  await this.userRepository.save(user);
+}
+
+
   async getDocentes(): Promise<User[]> {
     const docentes = await this.userRepository.find({
       where: {
-        rol: { id: 2 },  // ID del rol de docente
+        rol: { id: 2 },
       },
       relations: ['rol', 'ubicaciones'],
     });
@@ -142,4 +149,18 @@ async updateUser(id: number, updateUserDTO: UpdateUserDTO): Promise<User> {
 
     return docentes;
   }
+
+  async findOneByTokenRestablecerAcceso(tokenRestablecerAcceso: string) {
+    const user = await this.userRepository.findOne({
+      where: { tokenRestablecerAcceso },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    return user;
+  }
+  
+
 }

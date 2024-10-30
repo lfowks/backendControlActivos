@@ -28,8 +28,8 @@ export class LicitacionController {
         return this.licitacionService.updateLicitacion(id,updateLicitacionDTO);
     }
 
-    @Delete(':id')
-    deleteLicitacion(@Param('id') id: number){
-        return this.licitacionService.deleteLicitacion(id);
-    }
+    @Patch(':id/disponibilidad')
+    updateDisponibilidadLicitacion(@Param('id') id: number) {
+        return this.licitacionService.updateDisponibilidadLicitacion(id);
+    } 
 }

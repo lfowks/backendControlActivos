@@ -81,15 +81,20 @@ export class LicenciaService {
   }
   
 
-  async deleteLicencia(id: number) {
+ 
+  async updateDisponibilidadLicencia(id: number): Promise<void> {
     const licencia = await this.licenciaRepository.findOne({ where: { id } });
+
     if (!licencia) {
-        throw new NotFoundException('No se encontro la licencia seleccionada');
-    } try {
-        return await this.licenciaRepository.delete(id);
-    } catch (error) {
-        throw new BadRequestException('Error al eliminar una licencia');
+      throw new NotFoundException('No se encontró la Licencia');
     }
-}
+
+    if (licencia.disponibilidad === 'Fuera de Servicio') {
+      throw new BadRequestException('La Licencia ya está marcada como "Fuera de Servicio"');
+    }
+
+    licencia.disponibilidad = 'Fuera de Servicio';
+    await this.licenciaRepository.save(licencia);
+  }
 
 }
