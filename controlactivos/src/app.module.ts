@@ -16,7 +16,6 @@ import { MailerModule as MaileModule } from './mailer/mailer.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { NodemailerConfig } from './config/nodemailer.config';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),  // Configura el ConfigModule como global
