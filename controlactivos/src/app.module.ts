@@ -16,15 +16,17 @@ import { MailerModule as MaileModule } from './mailer/mailer.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { NodemailerConfig } from './config/nodemailer.config';
 
+//mysql://root:NYRELvMsHdSXWVXBrLwDsHLMwVkyNpXi@autorack.proxy.rlwy.net:42891/railway
+
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),  // Configura el ConfigModule como global
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
+      host: 'autorack.proxy.rlwy.net',
+      port: 42891,
       username: 'root',
-      password: '12345',
+      password: 'NYRELvMsHdSXWVXBrLwDsHLMwVkyNpXi',
       database: 'controlactivos',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
