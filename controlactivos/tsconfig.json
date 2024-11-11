@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "bcrypt"],
+    "types": ["@types/node", "@types/bcrypt"],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -21,5 +21,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
 }
