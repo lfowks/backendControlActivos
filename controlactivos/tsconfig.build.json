@@ -1,6 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "types": [
+      "node",
+      "bcrypt"
+    ],
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,
@@ -8,9 +12,9 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "paths": {
-      "@app/*": ["dist/*"]
+      "@app/*": [
+        "src/*"
+      ]
     }
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
+  }
 }
