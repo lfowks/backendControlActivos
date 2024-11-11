@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
     "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20.17.6",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -74,6 +75,10 @@
   "_moduleAliases": {
     "@app": "dist/src"
   },
+  "engines": {
+  "node": ">=20.18.0",
+  "npm": ">=10.8.0"
+},
   "jest": {
     "moduleFileExtensions": [
       "js",
