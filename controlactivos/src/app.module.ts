@@ -12,6 +12,7 @@ import { LicenciaModule } from './licencia/licencia.module';
 import { AuthModule } from './auth/auth.module';  
 import { ConfigModule } from '@nestjs/config';
 import { PrestamoModule } from './prestamo/prestamo.module';
+
 //mysql://root:NYRELvMsHdSXWVXBrLwDsHLMwVkyNpXi@autorack.proxy.rlwy.net:42891/railway
 
 @Module({

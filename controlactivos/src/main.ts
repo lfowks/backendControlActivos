@@ -1,4 +1,4 @@
-import 'module-alias/register'; // Este import debe ser lo primero en el archivo
+import 'module-alias/register';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
