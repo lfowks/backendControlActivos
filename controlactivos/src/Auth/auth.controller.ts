@@ -24,18 +24,18 @@ export class AuthController {
     return this.authService.login(user, recaptchaToken);
   }
    //Recuperar contraseña
-  @Post('forgot-password')
-  forgotPassword(@Body('email') email: string) {
-    return this.authService.forgotPassword(email);
-  }
+  // @Post('forgot-password')
+  // forgotPassword(@Body('email') email: string) {
+  //   return this.authService.forgotPassword(email);
+  // }
 
-  @Post('reset-password')
-  resetPassword(
-    @Body('tokenRestablecerAcceso') tokenRestablecerAcceso: string,
-    @Body('contraseña') contraseña: string,
-  ) {
-    return this.authService.resetPassword(tokenRestablecerAcceso, contraseña);
-  }
+//   @Post('reset-password')
+//   resetPassword(
+//     @Body('tokenRestablecerAcceso') tokenRestablecerAcceso: string,
+//     @Body('contraseña') contraseña: string,
+//   ) {
+//     return this.authService.resetPassword(tokenRestablecerAcceso, contraseña);
+//   }
 
   @Patch("change-pasaword")
   @UseGuards(JwtAuthGuard)

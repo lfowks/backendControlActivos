@@ -14,7 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrestamoModule } from './Prestamo/prestamo.module';
 // import { MailerModule as MaileModule } from './mailer/mailer.module';
 // import { MailerModule } from '@nestjs-modules/mailer';
-import { NodemailerConfig } from './config/nodemailer.config';
+// import { NodemailerConfig } from './config/nodemailer.config';
 
 //mysql://root:NYRELvMsHdSXWVXBrLwDsHLMwVkyNpXi@autorack.proxy.rlwy.net:42891/railway
 

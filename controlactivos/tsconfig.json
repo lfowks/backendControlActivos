@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node", "@types/bcrypt"],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,

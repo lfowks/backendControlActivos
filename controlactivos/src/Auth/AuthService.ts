@@ -5,7 +5,7 @@ import * as bcrypt from 'bcryptjs';
 import { User } from '../Entities/user.entity';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
-import { MailerService } from '../mailer/mailer.service';
+// import { MailerService } from '../mailer/mailer.service';
 import { resetPasswordEmailTemplate } from 'src/mailer/templates/resetPasswordEmail';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { EncoderService } from './encoder.service';
@@ -19,7 +19,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly mailerService: MailerService,
+    // private readonly mailerService: MailerService,
     private encoderService: EncoderService
   ) {}
 
@@ -69,28 +69,28 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
-  //Método recuperar contraseña 
-  async forgotPassword(email: string) {
-    const user = await this.userService.findOneByEmail(email);
+  // //Método recuperar contraseña 
+  // async forgotPassword(email: string) {
+  //   const user = await this.userService.findOneByEmail(email);
 
-    const passwordResetToken = await this.jwtService.signAsync(
-      { userId: user.id },
-      { expiresIn: '1h' },
-    );
+  //   const passwordResetToken = await this.jwtService.signAsync(
+  //     { userId: user.id },
+  //     { expiresIn: '1h' },
+  //   );
 
-    user.tokenRestablecerAcceso = passwordResetToken;
-    await this.userService.updateUser(user.id, user);
+  //   user.tokenRestablecerAcceso = passwordResetToken;
+  //   await this.userService.updateUser(user.id, user);
 
-    const html = resetPasswordEmailTemplate(user.nombre, passwordResetToken);
+  //   const html = resetPasswordEmailTemplate(user.nombre, passwordResetToken);
 
-    await this.mailerService.sendEmail({
-      to: [{ name: user.nombre, address: user.email }],
-      subject: 'Reset your password',
-      html,
-    });
+  //   await this.mailerService.sendEmail({
+  //     to: [{ name: user.nombre, address: user.email }],
+  //     subject: 'Reset your password',
+  //     html,
+  //   });
 
-    return { message: 'Password reset instructions sent to your email' };
-  }
+  //   return { message: 'Password reset instructions sent to your email' };
+  // }
 
 async resetPassword(tokenRestablecerAcceso: string, contraseña: string) {
     const user = await this.userService.findOneByTokenRestablecerAcceso(
