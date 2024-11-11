@@ -11,11 +11,7 @@ import { ActivoModule } from './activo/activo.module';
 import { LicenciaModule } from './licencia/licencia.module';
 import { AuthModule } from './auth/auth.module';  
 import { ConfigModule } from '@nestjs/config';
-import { PrestamoModule } from './Prestamo/prestamo.module';
-// import { MailerModule as MaileModule } from './mailer/mailer.module';
-// import { MailerModule } from '@nestjs-modules/mailer';
-// import { NodemailerConfig } from './config/nodemailer.config';
-
+import { PrestamoModule } from './prestamo/prestamo.module';
 //mysql://root:NYRELvMsHdSXWVXBrLwDsHLMwVkyNpXi@autorack.proxy.rlwy.net:42891/railway
 
 @Module({
@@ -31,9 +27,6 @@ import { PrestamoModule } from './Prestamo/prestamo.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    // MailerModule.forRootAsync({
-    //   useClass: NodemailerConfig,
-    // }),
     UserModule,
     LicitacionModule,
     LeyModule,
@@ -44,10 +37,7 @@ import { PrestamoModule } from './Prestamo/prestamo.module';
     ActivoModule,
     LicenciaModule,
     AuthModule,
-    PrestamoModule,
-    // MaileModule,
-    
-      
+    PrestamoModule,          
   ],
   controllers: [],
   providers: [],
