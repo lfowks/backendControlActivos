@@ -11,27 +11,22 @@ import { ActivoModule } from './activo/activo.module';
 import { LicenciaModule } from './licencia/licencia.module';
 import { AuthModule } from './auth/auth.module';  
 import { ConfigModule } from '@nestjs/config';
-import { PrestamoModule } from './Prestamo/prestamo.module';
-import { MailerModule as MaileModule } from './mailer/mailer.module';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { NodemailerConfig } from './config/nodemailer.config';
+import { PrestamoModule } from './prestamo/prestamo.module';
 
+//mysql://root:NYRELvMsHdSXWVXBrLwDsHLMwVkyNpXi@autorack.proxy.rlwy.net:42891/railway
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),  // Configura el ConfigModule como global
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
+      host: 'autorack.proxy.rlwy.net',
+      port: 42891,
       username: 'root',
-      password: '12345',
+      password: 'NYRELvMsHdSXWVXBrLwDsHLMwVkyNpXi',
       database: 'controlactivos',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-    }),
-    MailerModule.forRootAsync({
-      useClass: NodemailerConfig,
     }),
     UserModule,
     LicitacionModule,
@@ -43,10 +38,7 @@ import { NodemailerConfig } from './config/nodemailer.config';
     ActivoModule,
     LicenciaModule,
     AuthModule,
-    PrestamoModule,
-    MaileModule,
-    
-      
+    PrestamoModule,          
   ],
   controllers: [],
   providers: [],
