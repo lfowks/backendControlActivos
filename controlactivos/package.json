@@ -72,7 +72,7 @@
     "typescript": "^5.1.3"
   },
   "_moduleAliases": {
-    "@app": "dist/src"
+    "@app": "dist"
   },
   "engines": {
     "node": ">=20.18.0",
